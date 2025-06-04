@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Adventure Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="webcrumbs"> 
+        <div class="w-full max-w-[1200px] mx-auto bg-gradient-to-br from-amber-50 to-orange-100 p-4 sm:p-6 md:p-8 rounded-xl font-sans">
+            <header class="text-center mb-10">
+                <h1 class="text-4xl font-bold text-amber-800 mb-2">Cozy Adventure Generator</h1>
+                <p class="text-lg text-amber-700">Create memorable moments together based on your mood and the weather</p>
+</header>
+
+            <div class="flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-8">
+                <aside class="w-full lg:w-1/4">
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6 transform hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center gap-3 mb-4">
+      <div>
+                                <h3 class="font-semibold text-lg">Zoe</h3>
+                                <p class="text-amber-700 text-sm">Adventure Partner</p>
+      </div>
+    </div>
+                        <div class="w-full h-[1px] bg-amber-200 my-4"></div>
+                        <div class="text-sm">
+                            <div class="flex justify-between mb-2">
+        <span>Partner:</span>
+                                <span class="font-medium">Astra ;D</span>
+      </div>
+                            <div class="flex justify-between mb-2">
+        <span>Adventures Completed:</span>
+                                <span class="font-medium">0</span>
+      </div>
+                            <div class="flex justify-between">
+        <span>Favorite Category:</span>
+                                <span class="font-medium">???</span>
+      </div>
+    </div>
+  </div>
+
+<div class="weather-container">
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6 transform hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined {{weather_styles.icon_color}}">wb_sunny</span>
+      Current Weather
+    </h3>
+                        <div class="{{weather_styles.bg_color}} rounded-lg p-4">
+                            <div class="flex items-center gap-4 mb-4">
+                                <img src="https://openweathermap.org/img/wn/{{weather.icon}}@2x.png" 
+                                     alt="{{weather.description}}" 
+                                     class="w-16 h-16">
+                                <div>
+                                    <p class="text-2xl font-semibold {{weather_styles.text_color}}">{{weather.temp}}°C</p>
+                                    <p class="text-sm {{weather_styles.text_color}}">{{weather.description | capitalize}}</p>
+                                    <p class="text-xs {{weather_styles.text_color}} opacity-80">Feels like: {{weather.feels_like}}°C</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-center mb-2 {{weather_styles.text_color}}">Weather in <span class="font-medium">{{weather.city}}</span></p>
+                        </div>
+                    </div>
+
+<div class="bg-white rounded-xl shadow-md p-6 transform hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-amber-600">favorite</span>
+      How are you feeling?
+    </h3>
+                        <form action="/generate" method="post" id="adventure-form">
+                            <div class="grid grid-cols-2 gap-2">
+                                <!-- Happy Mood -->
+                                <label class="p-3 rounded-lg bg-amber-100 hover:bg-amber-200 transition-all flex flex-col items-center cursor-pointer relative">
+                                    <input type="radio" name="mood" value="happy" class="sr-only mood-radio" required>
+                                    <span class="material-symbols-outlined text-amber-600 mb-1">sentiment_very_satisfied</span>
+                                    <span class="text-sm">Happy</span>
+                                    <div class="mood-selected" style="display: none; position: absolute; top: -13px; right: -5px;">
+                                        <span class="material-symbols-outlined bg-amber-500 text-black rounded-full p-5" style="font-size: 16px;">check_circle</span>
+                                    </div>
+                                </label>
+                                
+                                <!-- Relaxed Mood -->
+                                <label class="p-3 rounded-lg bg-indigo-100 hover:bg-indigo-200 transition-all flex flex-col items-center cursor-pointer relative">
+                                    <input type="radio" name="mood" value="relaxed" class="sr-only mood-radio">
+                                    <span class="material-symbols-outlined text-indigo-600 mb-1">spa</span>
+                                    <span class="text-sm">Relaxed</span>
+                                    <div class="mood-selected" style="display: none; position: absolute; top: -13px; right: -5px;">
+                                        <span class="material-symbols-outlined bg-indigo-500 text-black rounded-full p-5" style="font-size: 16px;">check_circle</span>
+                                    </div>
+                                </label>
+                                
+                                <!-- Energetic Mood -->
+                                <label class="p-3 rounded-lg bg-emerald-100 hover:bg-emerald-200 transition-all flex flex-col items-center cursor-pointer relative">
+                                    <input type="radio" name="mood" value="energetic" class="sr-only mood-radio">
+                                    <span class="material-symbols-outlined text-emerald-600 mb-1">exercise</span>
+                                    <span class="text-sm">Energetic</span>
+                                    <div class="mood-selected" style="display: none; position: absolute; top: -13px; right: -5px;">
+                                        <span class="material-symbols-outlined bg-emerald-500 text-black rounded-full p-5" style="font-size: 16px;">check_circle</span>
+                                    </div>
+                                </label>
+                                
+                                <!-- Romantic Mood -->
+                                <label class="p-3 rounded-lg bg-rose-100 hover:bg-rose-200 transition-all flex flex-col items-center cursor-pointer relative">
+                                    <input type="radio" name="mood" value="romantic" class="sr-only mood-radio">
+                                    <span class="material-symbols-outlined text-rose-600 mb-1">favorite</span>
+                                    <span class="text-sm">Romantic</span>
+                                    <div class="mood-selected" style="display: none; position: absolute; top: -13px; right: -5px;">
+                                        <span class="material-symbols-outlined bg-rose-500 text-black rounded-full p-5" style="font-size: 16px;">check_circle</span>
+                                    </div>
+                                </label>
+    </div>
+                        </form>
+  </div>
+</div>
+  {/* Next: "Add mood history tracker" */}
+</aside>
+
+                <main class="w-full lg:w-2/4">
+                    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                        <h2 class="text-2xl font-bold text-amber-800 mb-4">Your Cozy Adventure Together</h2>
+                        
+                        <!-- This div will show the adventure after generation -->
+                        <div id="adventure-result" class="bg-gradient-to-r from-amber-50 to-amber-100 p-5 rounded-lg mb-6 border border-amber-200 hidden">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-2">
+                                    <span id="mood-icon" class="material-symbols-outlined"></span>
+                                    <h3 class="font-semibold text-lg">Your <span id="mood-text"></span> Adventure</h3>
+        </div>
+                                <span id="mood-badge" class="px-2 py-1 text-xs rounded-full"></span>
+      </div>
+      
+                            <p id="adventure-description" class="text-sm mb-4"></p>
+                            
+                            <div class="flex gap-3 justify-between">
+                                <div class="text-sm text-amber-700">
+                                    <p><span class="font-medium">Generated:</span> Just now</p>
+      </div>
+                                <div class="flex gap-2">
+                                    <button class="p-2 rounded-full bg-green-100 hover:bg-green-200 transition-colors">
+                                        <span class="material-symbols-outlined text-green-600">thumb_up</span>
+          </button>
+                                    <button class="p-2 rounded-full bg-red-100 hover:bg-red-200 transition-colors">
+                                        <span class="material-symbols-outlined text-red-600">thumb_down</span>
+          </button>
+                                    <button class="p-2 rounded-full bg-indigo-100 hover:bg-indigo-200 transition-colors">
+                                        <span class="material-symbols-outlined text-indigo-600">bookmark</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+                        <div class="flex justify-center">
+                            <button type="submit" form="adventure-form" id="generate-btn" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-3 px-6 rounded-full flex items-center gap-2 transform hover:scale-105 transition-all">
+        Generate New Adventure
+      </button>
+    </div>
+  </div>
+  
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-bold text-amber-800 mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined">history</span>
+      Recent Adventures
+    </h2>
+    
+                        
+
+                        <div class="mt-4 text-center">
+                            <button class="py-2 px-3 rounded-lg text-amber-700 border border-amber-300 text-sm hover:bg-amber-50 transition-all flex items-center justify-center gap-1 mx-auto">
+                                <span class="material-symbols-outlined text-sm">add</span>
+Show More
+</button>
+</div>
+
+</div>
+</main>
+
+                <aside class="w-full lg:w-1/4">
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6 transform hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-amber-600">bookmark</span>
+      Saved Templates
+    </h3>
+                        <ul class="space-y-3">
+                            <li class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-all cursor-pointer">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-medium">Rainy Day Indoors</span>
+                                    <span class="material-symbols-outlined text-amber-600">water_drop</span>
+        </div>
+                                <p class="text-xs text-amber-700 mt-1">5 cozy activities for staying in</p>
+      </li>
+                            <li class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-all cursor-pointer">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-medium">Weekend Getaway</span>
+                                    <span class="material-symbols-outlined text-amber-600">weekend</span>
+        </div>
+                                <p class="text-xs text-amber-700 mt-1">2-day adventure plan</p>
+      </li>
+                            <li class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-all cursor-pointer">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-medium">Surprise Date Night</span>
+                                    <span class="material-symbols-outlined text-amber-600">celebration</span>
+        </div>
+                                <p class="text-xs text-amber-700 mt-1">Spontaneous evening ideas</p>
+      </li>
+    
+
+                        <div class="text-center mt-4">
+                            <button class="py-2 px-3 rounded-lg text-amber-600 bg-amber-50 hover:bg-amber-100 transition-all text-sm flex items-center justify-center gap-1 mx-auto">
+                                <span class="material-symbols-outlined text-sm">visibility</span>
+View All
+</button>
+</div></ul>
+                        <div class="mt-4">
+                            <button class="w-full py-2 rounded-lg border border-amber-300 text-amber-700 hover:bg-amber-50 transition-all flex items-center justify-center gap-2 text-sm">
+                                <span class="material-symbols-outlined">add</span>
+        Create New Template
+      </button>
+    </div>
+  </div>
+
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6 transform hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-amber-600">settings</span>
+      Preferences
+    </h3>
+                        <div class="space-y-4">
+      <div>
+                                <label class="flex items-center justify-between cursor-pointer">
+                                    <span class="text-sm">Budget Range</span>
+                                    <select class="bg-amber-50 border border-amber-200 rounded-lg text-sm py-1 px-2">
+            <option>$</option>
+            <option selected>$$</option>
+            <option>$$$</option>
+          </select>
+        </label>
+      </div>
+      <div>
+                                <label class="flex items-center justify-between cursor-pointer">
+                                    <span class="text-sm">Maximum Distance</span>
+                                    <select class="bg-amber-50 border border-amber-200 rounded-lg text-sm py-1 px-2">
+            <option>5 miles</option>
+            <option selected>15 miles</option>
+            <option>30+ miles</option>
+          </select>
+        </label>
+      </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Accessibility Needs</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" />
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+        </label>
+      </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Kid-Friendly Options</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked />
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+                    <div class="bg-white rounded-xl shadow-md p-6 transform hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-amber-600">person_add</span>
+      Invite Partner
+    </h3>
+                        <p class="text-sm mb-4">Share this unique code with your adventure partner to give them access:</p>
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 flex justify-between items-center mb-4">
+                            <span class="font-mono font-medium">COZY-4872-ADVE</span>
+                            <button class="text-amber-700 hover:text-amber-900 transition-colors">
+                                <span class="material-symbols-outlined">content_copy</span>
+      </button>
+    </div>
+                        <button class="w-full py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition-all flex items-center justify-center gap-2 text-sm">
+                            <span class="material-symbols-outlined">mail</span>
+      Send Invitation
+    </button>
+  </div>
+  {/* Next: "Add notification preferences" */}
+</aside>
+</div>
+</div> 
+</div>
+
+</body>
+</html>
