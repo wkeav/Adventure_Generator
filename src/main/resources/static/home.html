@@ -149,7 +149,7 @@
         </div>
       </div>
     </div>
-    
+    <!-- Generate button -->
                         <div class="flex justify-center">
                             <button type="submit" form="adventure-form" id="generate-btn" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-3 px-6 rounded-full flex items-center gap-2 transform hover:scale-105 transition-all">
         Generate New Adventure
@@ -285,5 +285,43 @@ View All
 </div> 
 </div>
 
+<script>
+    // Select mood listener 
+    document.addEventListener('DOMContentLoaded',function(){
+        let selectedMood = null;
+
+        const moodRadios = document.querySelectorAll('.mood-radio');
+        moodRadios.forEach(radio => {
+            radio.addEventListener('change', function(){
+                // Hide all selected 
+                document.querySelector('.mood-selected').forEach(el => {
+                    el.style.display = 'none';
+                });
+
+                // Show ONLY selected one & store mood 
+                if(this.checked){
+                    const selectedBadge = this.parentNode.querySelector('.mood-selected');
+                        if (selectedBadge) {
+                            selectedBadge.style.display = 'block';
+                            selectedMood = this.value;
+                            console.log('Selected mood:', selectedMood); 
+                        }
+                }
+            });
+        });
+
+        // Generate button 
+        const generateBtn = document.getElementById('generate-btn');
+        const newAdventure = document.getElementById('adventure-form');
+
+        // AJAX
+        document.getElementById('generateBtn').addEventListener('click', function() {
+        // AJAX logic here
+        });
+    });
+    
+
+</script>
 </body>
 </html>
+

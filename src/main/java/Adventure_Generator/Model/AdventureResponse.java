@@ -34,6 +34,11 @@ public class AdventureResponse {
 
     public void setWeatherDescription(String weatherDescription) {
         this.weatherDescription = weatherDescription;
+    }
+    @Override
+    public String toString() {
+        return "AdventureResponse [adventureIdea=" + adventureIdea + ", temperature=" + temperature
+                + ", weatherDescription=" + weatherDescription + "]";
     } 
 
     
