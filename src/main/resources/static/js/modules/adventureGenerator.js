@@ -2,16 +2,40 @@
 export class AdventureGenerator {
     constructor() {
         this.initializeGenerateButton();
+        this.mood = null;
+    }
+    setMood(mood){
+        this.mood = mood;
     }
 
     initializeGenerateButton() {
         const generateBtn = document.getElementById('generate-btn');
-        generateBtn.addEventListener('click', (e) => this.handleGenerateClick(e));
+        generateBtn.addEventListener('click', (e) => this.generateClick(e));
     }
 
-    async handleGenerateClick(event) {
+    startLoading(){
+        const generateBtn = document.getElementById('generate-btn');
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = `
+        <span class="material-symbols-outlined animate-spin">refresh</span>
+        Generating... `;
+    }
+    stopLoading(){
+        const generateBtn = document.getElementById('generate-btn');
+        generateBtn.disabled = false;
+        generateBtn.innerHTML = 'Generate New Adventure';
+        
+    }
+
+    async generateClick(event) {
         event.preventDefault();
-        // We'll implement the AJAX call here
-        // This is where you'll add your fetch or axios call
+        const selectedMood = this.mood.getSelectedMood();
+        if(!selectedMood){
+            alert('Please select a mood first!')
+            return;
+        }
+
+    
+
     }
 } 

@@ -18,6 +18,7 @@ export class MoodHandler {
             el.style.display = 'none';
         });
 
+        // Only show the selected one
         if (event.target.checked) {
             const selectedBadge = event.target.parentNode.querySelector('.mood-selected');
             if (selectedBadge) {
