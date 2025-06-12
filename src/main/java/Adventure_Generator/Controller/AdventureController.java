@@ -25,7 +25,7 @@ public class AdventureController {
     @Autowired
     AdventureService adventureService;
 
-    @PostMapping(value = "generate" ,produces = "application/json", consumes = "application/json")
+    @PostMapping(value = "generate-adventure" ,produces = "application/json", consumes = "application/json")
     public ResponseEntity generateAdventure(@RequestBody AdventureRequest adventureRequest) {
         String mood = adventureRequest.getMood();
 

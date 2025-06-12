@@ -30,9 +30,31 @@ export class AdventureGenerator {
     async generateClick(event) {
         event.preventDefault();
         const selectedMood = this.mood.getSelectedMood();
+
         if(!selectedMood){
             alert('Please select a mood first!')
             return;
+        }
+
+        // AJAX with fetch API 
+        try{
+            this.startLoading();
+            const response = await fetch('/generate-adventure',{
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({mood: selectedMood})
+            });
+            if(!response.ok){
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json(); // response data 
+        }catch(error){
+            console.error('Error:', error);
+            alert('Failed to generate adventure. Please try again.');
+        }finally {
+            this.stopLoading();
         }
 
     
