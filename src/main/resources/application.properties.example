@@ -1,1 +1,2 @@
 spring.application.name=Adventure_Generator
+weather.api.key=YOUR_OPENWEATHERMAP_API_KEY
