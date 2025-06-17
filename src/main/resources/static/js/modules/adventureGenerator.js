@@ -28,6 +28,7 @@ export class AdventureGenerator {
     }
 
     async generateClick(event) {
+        console.log('Generate button clicked!');
         event.preventDefault();
         const selectedMood = this.mood.getSelectedMood();
 
@@ -50,14 +51,22 @@ export class AdventureGenerator {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json(); // response data 
+
+            // Update UI with backend data 
+            const adventureElement = document.getElementById('adventure-description');
+            const moodElement = document.getElementById('mood-text');
+            // console.log('Found elements:', {adventureElement, moodElement}); 
+
+            adventureElement.textContent = data.adventureIdea;
+            moodElement.textContent = selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1);
+
+            document.getElementById('adventure-result').classList.remove('hidden');
+            
         }catch(error){
             console.error('Error:', error);
             alert('Failed to generate adventure. Please try again.');
         }finally {
             this.stopLoading();
         }
-
-    
-
     }
 } 
