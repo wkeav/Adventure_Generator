@@ -1,4 +1,4 @@
-package Adventure_Generator.Model;
+package Adventure_Generator.DTOs.Response;
 
 public class AdventureResponse {
     private String adventureIdea;

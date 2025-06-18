@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
-import Adventure_Generator.Model.AdventureRequest;
-import Adventure_Generator.Model.AdventureResponse;
+import Adventure_Generator.DTOs.Requests.AdventureRequest;
+import Adventure_Generator.DTOs.Response.AdventureResponse;
 import Adventure_Generator.Service.AdventureService;
 
 import org.springframework.web.bind.annotation.GetMapping;
