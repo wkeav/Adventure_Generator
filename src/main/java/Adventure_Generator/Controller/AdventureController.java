@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping(path = "/")
 public class AdventureController {
-
     AdventureResponse adventureResponse;
     @Autowired
     AdventureService adventureService;
@@ -33,7 +32,6 @@ public class AdventureController {
         AdventureResponse response = new AdventureResponse(adventure, 0, "N/A");
         return ResponseEntity.ok(response);
     }
-    
     
     
 }

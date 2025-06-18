@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import Adventure_Generator.DTOs.Response.WeatherResponse;
+import reactor.core.publisher.Mono;
 
 @Component
 public class WeatherApiClient {
@@ -18,17 +19,16 @@ public class WeatherApiClient {
         this.webClient = WebClient.builder().baseUrl(BASE_URL).build();
     }
 
-    // Weather request 
+    // Weather GET request 
     public WeatherResponse getWeatherByCoordinates(double latitude, double longitude){
         String url = String.format("?lat=%.2f&lon=%.2f&appid=%s", latitude,longitude,this.API_KEY);
-
+        
         try{
-            webClient.get()
+            return webClient.get()
                     .uri(url)
                     .retrieve()
                     .bodyToMono(WeatherResponse.class)
                     .block();
-                
         } catch (Exception e){
             return new WeatherResponse(20.0, "clear sky", "Unknown");
         }
