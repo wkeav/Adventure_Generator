@@ -35,6 +35,11 @@ public class WeatherResponse {
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }
+    @Override
+    public String toString() {
+        return "WeatherResponse [temperature=" + temperature + ", description=" + description + ", cityName=" + cityName
+                + "]";
+    }
 
     
 }

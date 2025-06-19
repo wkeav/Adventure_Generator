@@ -30,8 +30,9 @@ public class WeatherApiClient {
                     .bodyToMono(WeatherResponse.class)
                     .block();
         } catch (Exception e){
-            return new WeatherResponse(20.0, "clear sky", "Unknown");
+            return new WeatherResponse(20.0, "clear sky", "Unknown"); //default location 
         }
+
 
     }
 
