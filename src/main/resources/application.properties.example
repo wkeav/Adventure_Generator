@@ -1,2 +1,14 @@
 spring.application.name=Adventure_Generator
+
+# WEATHER 
 weather.api.key=YOUR_OPENWEATHERMAP_API_KEY
+
+# PostgreSQL database configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/productdb
+spring.datasource.username=postgres
+spring.datasource.password=yourpassword
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# JPA configurations
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
