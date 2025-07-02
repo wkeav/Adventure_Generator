@@ -2,7 +2,7 @@ package Adventure_Generator.Service;
 
 import java.time.LocalDateTime;
 
-import org.apache.catalina.startup.ClassLoaderFactory.Repository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,8 +43,17 @@ public class AuthenticationService {
 
     }
 
-    public String findUserByEmail(String email, String password){
+    public User findUserByEmail(String email, String password){
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+
+            // Check if password matches 
+            if(passwordEncoder.matches(password,user.getPassword())){
+                return user;
+            }
+        }
+        return null;
     }
-    
-    
 }
