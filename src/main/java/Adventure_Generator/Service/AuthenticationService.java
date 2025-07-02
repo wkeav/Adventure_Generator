@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,8 @@ import Adventure_Generator.Repository.UserRepository;
 public class AuthenticationService {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     // TODO finish all this 
     public boolean isRegisteredUser(String email){
