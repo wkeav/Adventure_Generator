@@ -1,5 +1,8 @@
 package Adventure_Generator.API;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,18 +25,28 @@ public class WeatherApiClient {
     // Weather GET request 
     public WeatherResponse getWeatherByCoordinates(double latitude, double longitude){
         String url = String.format("?lat=%.2f&lon=%.2f&appid=%s", latitude,longitude,this.API_KEY);
-        
-        try{
-            return webClient.get()
-                    .uri(url)
-                    .retrieve()
-                    .bodyToMono(WeatherResponse.class)
-                    .block();
-        } catch (Exception e){
-            return new WeatherResponse(20.0, "clear sky", "Unknown"); //default location 
-        }
 
+        // Get raw JSON as a map 
+        Map<String, Object> rawResponse = webClient.get()
+                .uri(url) // sets the endpoint
+                .retrieve()     //prepare 
+                .bodyToMono(Map.class) // Json as a map
+                .block();
 
+        // Extracting only what we need
+        Map<String, Object> main = (Map<String,Object>) rawResponse.get("main");
+        double tempKelvin = (double) main.get("temp");
+        double tempCelsius = tempKelvin - 273.15;
+        String feelLike = (String) main.get("feels_like");
+
+        List<Map<String,Object>> weatherList = (List<Map<String, Object>>)rawResponse.get("weather");
+        Map<String,Object> weather = weatherList.get(0);
+        String description = (String) weather.get("description");
+        String icon = (String) weather.get("icon");
+
+        String name = (String) rawResponse.get("name");
+
+        return new WeatherResponse(tempCelsius, description,name,icon,feelLike);
     }
 
 

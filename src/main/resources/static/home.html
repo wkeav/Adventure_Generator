@@ -54,12 +54,12 @@
                                      alt="{{weather.description}}" 
                                      class="w-16 h-16">
                                 <div>
-                                    <p class="text-2xl font-semibold {{weather_styles.text_color}}">{{weather.temp}}°C</p>
-                                    <p class="text-sm {{weather_styles.text_color}}">{{weather.description | capitalize}}</p>
-                                    <p class="text-xs {{weather_styles.text_color}} opacity-80">Feels like: {{weather.feels_like}}°C</p>
+                                    <p class="text-2xl font-semibold {{weather_styles.text_color}}">{{weather-temp}}°C</p>
+                                    <p class="text-sm {{weather_styles.text_color}}">{{weather-description | capitalize}}</p>
+                                    <p class="text-xs {{weather_styles.text_color}} opacity-80">Feels like: {{weather-feels-like}}°C</p>
                                 </div>
                             </div>
-                            <p class="text-sm text-center mb-2 {{weather_styles.text_color}}">Weather in <span class="font-medium">{{weather.city}}</span></p>
+                            <p class="text-sm text-center mb-2 {{weather_styles.text_color}}">Weather in <span class="font-medium">{{weather-city}}</span></p>
                         </div>
                     </div>
 

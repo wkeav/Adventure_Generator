@@ -8,6 +8,8 @@ export class getWeather {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
                 console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+                this.fetchWeather(latitude,longitude);
             },
             (error) => {
                 console.error("Error getting location:", error.message);
@@ -21,9 +23,9 @@ export class getWeather {
         fetch(`/api/weather?lat=${lat}&lon=${lon}`)
             .then(response => response.json())
             .then(data => {
-                const tempElement = document.getElementById('weather.temp');
-                const descElement = document.getElementById('weather.description');
-                const cityElement = document.getElementById('weather.city');
+                const tempElement = document.getElementById('weather-temp');
+                const descElement = document.getElementById('weather-description');
+                const cityElement = document.getElementById('weather-city');
 
                 // Updating their content with backend data 
                 tempElement.textContent = data.temp + "°C";
