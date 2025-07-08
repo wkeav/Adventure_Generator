@@ -1,0 +1,28 @@
+[
+    { "mood": "happy", "weather": "clear", "adventure": "Have a picnic! Drinks on the side + paint." },
+    { "mood": "happy", "weather": "rain", "adventure": "Go to a museum and explore!" },
+    { "mood": "happy", "weather": "rain", "adventure": "Go to a comedy live show if available, or watch a comedy movie at home!" },
+    { "mood": "happy", "weather": "clear", "adventure": "Go on a walk and yap :D" },
+    { "mood": "happy", "weather": "rain", "adventure": "Cook together and try a new recipe." },
+  
+    { "mood": "relaxed", "weather": "clear", "adventure": "Go stargazing." },
+    { "mood": "relaxed", "weather": "rain", "adventure": "Visit a cafe and read some books or talk." },
+    { "mood": "relaxed", "weather": "rain", "adventure": "Enjoy a spa day with relaxing treatments." },
+    { "mood": "relaxed", "weather": "clear", "adventure": "Crafty nights under the stars." },
+    { "mood": "relaxed", "weather": "rain", "adventure": "Movie time! Cozy up with blankets." },
+    { "mood": "relaxed", "weather": "rain", "adventure": "Making playlists together." },
+    { "mood": "relaxed", "weather": "rain", "adventure": "Crochet date indoors." },
+  
+    { "mood": "energetic", "weather": "clear", "adventure": "Go hiking and enjoy nature!" },
+    { "mood": "energetic", "weather": "clear", "adventure": "Go for a run." },
+    { "mood": "energetic", "weather": "clear", "adventure": "Rent a bike and go explore!" },
+    { "mood": "energetic", "weather": "rain", "adventure": "Try out a dance class indoors." },
+    { "mood": "energetic", "weather": "rain", "adventure": "Online gaming marathon." },
+  
+    { "mood": "romantic", "weather": "clear", "adventure": "Take a sunset adventure." },
+    { "mood": "romantic", "weather": "rain", "adventure": "Cook together and light candles." },
+    { "mood": "romantic", "weather": "clear", "adventure": "Write each other letters in the park." },
+    { "mood": "romantic", "weather": "rain", "adventure": "Making playlists and slow dancing at home." },
+    { "mood": "romantic", "weather": "clear", "adventure": "Visit an art gallery & hold hands hehe." },
+    { "mood": "romantic", "weather": "rain", "adventure": "Buy each other takeout and have a cozy night in." }
+  ]

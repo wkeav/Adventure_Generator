@@ -37,7 +37,8 @@ public class WeatherApiClient {
         Map<String, Object> main = (Map<String,Object>) rawResponse.get("main");
         double tempKelvin = (double) main.get("temp");
         double tempCelsius = tempKelvin - 273.15;
-        String feelLike = (String) main.get("feels_like");
+        double feelsLikeKelvin = ((Number) main.get("feels_like")).doubleValue();
+        double feelsLikeCelsius = feelsLikeKelvin - 273.15;
 
         List<Map<String,Object>> weatherList = (List<Map<String, Object>>)rawResponse.get("weather");
         Map<String,Object> weather = weatherList.get(0);
@@ -46,7 +47,7 @@ public class WeatherApiClient {
 
         String name = (String) rawResponse.get("name");
 
-        return new WeatherResponse(tempCelsius, description,name,icon,feelLike);
+        return new WeatherResponse(tempCelsius, description,name,icon,feelsLikeCelsius);
     }
 
 

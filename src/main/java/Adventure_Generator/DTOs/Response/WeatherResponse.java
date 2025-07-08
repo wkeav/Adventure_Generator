@@ -5,10 +5,10 @@ public class WeatherResponse {
     private String description;
     private String cityName;
     private String icon;
-    private String feelLike;
+    private double feelLike;
 
     public WeatherResponse(){}
-    public WeatherResponse(double temperature, String description, String cityName,String icon, String feelLike){
+    public WeatherResponse(double temperature, String description, String cityName,String icon, double feelLike){
         this.temperature = temperature;
         this.description = description;
         this.cityName = cityName;
@@ -45,10 +45,10 @@ public class WeatherResponse {
     public void setIcon(String icon) {
         this.icon = icon;
     }
-    public String getFeelLike() {
+    public double getFeelLike() {
         return feelLike;
     }
-    public void setFeelLike(String feelLike) {
+    public void setFeelLike(double feelLike) {
         this.feelLike = feelLike;
     }
     @Override

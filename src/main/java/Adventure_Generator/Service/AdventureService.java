@@ -1,5 +1,9 @@
 package Adventure_Generator.Service;
 
+import java.util.HashMap;
+import java.util.List;
+
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,7 +42,7 @@ public class AdventureService {
     };
 
     // Helper methods
-    public String generateAdventure(String mood){
+    public String generateRandomAdventure(String mood){
 
         if (mood.equalsIgnoreCase("happy")){
             return getRandomAdventure(happy_adventure);
@@ -56,8 +60,18 @@ public class AdventureService {
     }
 
     public String getRandomAdventure(String[] adventure){
-        int index = (int) Math.random() * adventure.length ;
+        int index = (int) (Math.random() * adventure.length) ;
+        // System.out.println(index); 
         return adventure[index];
+        
+    }
+
+    public String generateAdventure(String weather, String mood){
+        HashMap<String, HashMap<String, List<String>>> adventureMap = new HashMap<>();
+
+        adventureMap.put("rain",new HashMap<happy,>());
+
+
     }
 
 }

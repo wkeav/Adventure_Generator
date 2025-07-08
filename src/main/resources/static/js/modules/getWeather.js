@@ -26,11 +26,16 @@ export class getWeather {
                 const tempElement = document.getElementById('weather-temp');
                 const descElement = document.getElementById('weather-description');
                 const cityElement = document.getElementById('weather-city');
+                const feelsLikeElement = document.getElementById('weather-feels-like');
+                const iconElement = document.getElementById('weather-icon');
 
-                // Updating their content with backend data 
-                tempElement.textContent = data.temp + "°C";
+                // Update their content with backend data
+                tempElement.textContent = Math.round(data.temperature) + "°C";
                 descElement.textContent = data.description;
-                cityElement.textContent = data.city;
+                cityElement.textContent = data.cityName;
+                feelsLikeElement.textContent = "Feels like: " + Math.round(data.feelLike) + "°C";
+                iconElement.src = `https://openweathermap.org/img/wn/${data.icon}@2x.png`;
+                iconElement.alt = data.description;
             })
             .catch(error =>{
                 console.error("Error fetching weather:", error);

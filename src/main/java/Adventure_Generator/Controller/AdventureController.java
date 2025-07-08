@@ -28,7 +28,7 @@ public class AdventureController {
     public ResponseEntity generateAdventure(@RequestBody AdventureRequest adventureRequest) {
         String mood = adventureRequest.getMood();
 
-        String adventure = adventureService.generateAdventure(mood);
+        String adventure = adventureService.generateRandomAdventure(mood);
         AdventureResponse response = new AdventureResponse(adventure, 0, "N/A");
         return ResponseEntity.ok(response);
     }
