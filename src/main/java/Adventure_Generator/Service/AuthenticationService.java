@@ -23,7 +23,7 @@ public class AuthenticationService {
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    // TODO finish all this 
+
     public boolean isRegisteredUser(String email){
         return userRepository.existsByEmail(email);
     }

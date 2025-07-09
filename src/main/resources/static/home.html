@@ -283,40 +283,113 @@ View All
 </div> 
 </div>
 
-<!-- <script>
-    // Select mood listener 
-    document.addEventListener('DOMContentLoaded',function(){
-        let selectedMood = null;
-
-        const moodRadios = document.querySelectorAll('.mood-radio');
-        moodRadios.forEach(radio => {
-            radio.addEventListener('change', function(){
-                // Hide all selected 
-                document.querySelector('.mood-selected').forEach(el => {
-                    el.style.display = 'none';
-                });
-
-                // Show ONLY selected one & store mood 
-                if(this.checked){
-                    const selectedBadge = this.parentNode.querySelector('.mood-selected');
-                        if (selectedBadge) {
-                            selectedBadge.style.display = 'block';
-                            selectedMood = this.value;
-                            console.log('Selected mood:', selectedMood); 
-                        }
-                }
-            });
-        });
-
-        // Generate button 
-        const generateBtn = document.getElementById('generate-btn');
-        const newAdventure = document.getElementById('adventure-form');
-
-
-    });
-    
-
-</script> -->
+<!-- User Auth Modal/Dropdown -->
+<div id="auth-modal" style="position:fixed; top:2rem; right:2rem; z-index:1000;">
+  <div class="auth-box">
+    <div id="auth-tabs">
+      <button id="show-login" class="auth-tab active">Login</button>
+      <button id="show-register" class="auth-tab">Register</button>
+    </div>
+    <form id="login-form" class="auth-form">
+      <input type="email" id="login-email" placeholder="Email" required />
+      <input type="password" id="login-password" placeholder="Password" required />
+      <button type="submit">Login</button>
+      <div id="login-message"></div>
+    </form>
+    <form id="register-form" class="auth-form" style="display:none;">
+      <input type="text" id="register-username" placeholder="Username" required />
+      <input type="email" id="register-email" placeholder="Email" required />
+      <input type="password" id="register-password" placeholder="Password" required />
+      <button type="submit">Register</button>
+      <div id="register-message"></div>
+    </form>
+  </div>
+</div>
+<style>
+  .auth-box {
+    background: #fff7ee;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    min-width: 320px;
+    max-width: 350px;
+  }
+  #auth-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .auth-tab {
+    background: none;
+    border: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #a05a1c;
+    padding: 0.5em 1em;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: border 0.2s;
+  }
+  .auth-tab.active {
+    border-bottom: 2px solid #a05a1c;
+    color: #a05a1c;
+  }
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+  .auth-form input {
+    padding: 0.7em;
+    border: 1px solid #e0c9b2;
+    border-radius: 6px;
+    font-size: 1em;
+  }
+  .auth-form button {
+    background: #7c4dff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.7em;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0.5em;
+    transition: background 0.2s;
+  }
+  .auth-form button:hover {
+    background: #5f36c7;
+  }
+  #login-message, #register-message {
+    min-height: 1.2em;
+    font-size: 0.95em;
+    text-align: center;
+  }
+</style>
+<script>
+  // Toggle between login/register
+  document.getElementById('show-login').onclick = function() {
+    document.getElementById('login-form').style.display = 'flex';
+    document.getElementById('register-form').style.display = 'none';
+    this.classList.add('active');
+    document.getElementById('show-register').classList.remove('active');
+  };
+  document.getElementById('show-register').onclick = function() {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'flex';
+    this.classList.add('active');
+    document.getElementById('show-login').classList.remove('active');
+  };
+  // Placeholder submit handlers
+  document.getElementById('login-form').onsubmit = function(e) {
+    e.preventDefault();
+    document.getElementById('login-message').textContent = 'Logged in! (simulate)';
+  };
+  document.getElementById('register-form').onsubmit = function(e) {
+    e.preventDefault();
+    document.getElementById('register-message').textContent = 'Registered! (simulate)';
+  };
+</script>
 <script type="module" src="/js/main.js"></script>
 </body>
 </html>

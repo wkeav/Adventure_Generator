@@ -9,6 +9,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+/*
+ * This is a JPA entity, that maps directly to the database 
+ */
+
 @Entity
 public class User {
     @Id
