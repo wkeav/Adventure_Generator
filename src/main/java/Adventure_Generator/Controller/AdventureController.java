@@ -27,8 +27,9 @@ public class AdventureController {
     @PostMapping(value = "generate-adventure" ,produces = "application/json", consumes = "application/json")
     public ResponseEntity generateAdventure(@RequestBody AdventureRequest adventureRequest) {
         String mood = adventureRequest.getMood();
+        String weather = adventureRequest.getWeather();
 
-        String adventure = adventureService.generateRandomAdventure(mood);
+        String adventure = adventureService.generateAdventure(mood, weather);
         AdventureResponse response = new AdventureResponse(adventure, 0, "N/A");
         return ResponseEntity.ok(response);
     }
