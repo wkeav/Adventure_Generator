@@ -22,7 +22,7 @@ public class AdventureController {
     @Autowired
     AdventureService adventureService;
 
-    @PostMapping(path = "api/adventures/generate" , value = "generate-adventure" ,produces = "application/json", consumes = "application/json")
+    @PostMapping(value = "/generate" ,produces = "application/json", consumes = "application/json")
     public ResponseEntity generateAdventure(@RequestBody AdventureRequest adventureRequest) {
         String mood = adventureRequest.getMood();
         String weather = adventureRequest.getWeather();

@@ -8,12 +8,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /*
  * This is a JPA entity, that maps directly to the database 
  */
 
 @Entity
+@Table(name = "\"users\"")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +30,17 @@ public class User {
     @Column
     private LocalDateTime createdAt;
 
+    public User(){
+    }
+    
+
+    public User(long id, String email, String userName, String password, LocalDateTime createdAt) {
+        this.id = id;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+        this.createdAt = createdAt;
+    }
     // Getter & setter
     public long getId() {
         return id;
