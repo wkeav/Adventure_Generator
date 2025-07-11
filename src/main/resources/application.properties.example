@@ -12,3 +12,7 @@ spring.datasource.driver-class-name=org.postgresql.Driver
 # JPA configurations
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+# JWT token
+jwt.secret = your_secret_token_here
