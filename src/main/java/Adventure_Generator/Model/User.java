@@ -1,4 +1,4 @@
-package Adventure_Generator.Model;
+package Adventure_generator.Model;
 
 
 import java.time.LocalDateTime;

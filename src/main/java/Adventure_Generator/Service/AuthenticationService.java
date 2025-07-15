@@ -1,4 +1,4 @@
-package Adventure_Generator.Service;
+package Adventure_generator.Service;
 
 import java.time.LocalDateTime;
 
@@ -8,8 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import Adventure_Generator.Model.User;
-import Adventure_Generator.Repository.UserRepository;
+import Adventure_generator.Model.User;
+import Adventure_generator.Repository.UserRepository;
 
 /*
  * Handles all authentication related business logic - User registration and user login

@@ -1,4 +1,4 @@
-package Adventure_Generator.POJO;
+package Adventure_generator.POJO;
 
 public class AdventureIdea {
     private String mood;

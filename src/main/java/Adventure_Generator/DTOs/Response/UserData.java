@@ -1,4 +1,4 @@
-package Adventure_Generator.DTOs.Response;
+package Adventure_generator.DTOs.Response;
 
 import java.time.LocalDateTime;
 

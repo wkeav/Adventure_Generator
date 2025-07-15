@@ -1,15 +1,14 @@
-package Adventure_Generator.Controller;
+package Adventure_generator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
-import Adventure_Generator.DTOs.Requests.AdventureRequest;
-import Adventure_Generator.DTOs.Response.AdventureResponse;
-import Adventure_Generator.Service.AdventureService;
-
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import Adventure_generator.DTOs.Requests.AdventureRequest;
+import Adventure_generator.DTOs.Response.AdventureResponse;
+import Adventure_generator.Service.AdventureService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

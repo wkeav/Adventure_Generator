@@ -1,9 +1,9 @@
-package Adventure_Generator.Controller;
+package Adventure_generator.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import Adventure_Generator.DTOs.Response.WeatherResponse;
-import Adventure_Generator.Service.WeatherService;
+import Adventure_generator.DTOs.Response.WeatherResponse;
+import Adventure_generator.Service.WeatherService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

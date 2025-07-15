@@ -1,4 +1,4 @@
-package Adventure_Generator.API;
+package Adventure_generator.API;
 
 import java.util.List;
 import java.util.Map;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import Adventure_Generator.DTOs.Response.WeatherResponse;
+import Adventure_generator.DTOs.Response.WeatherResponse;
 import reactor.core.publisher.Mono;
 
 @Component

@@ -1,11 +1,11 @@
-package Adventure_Generator.Service;
+package Adventure_generator.Service;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import Adventure_Generator.API.WeatherApiClient;
-import Adventure_Generator.DTOs.Response.WeatherResponse;
+import Adventure_generator.API.WeatherApiClient;
+import Adventure_generator.DTOs.Response.WeatherResponse;
 import ch.qos.logback.classic.Logger;
 
 @Service

@@ -1,4 +1,4 @@
-package Adventure_Generator.DTOs.Requests;
+package Adventure_generator.DTOs.Requests;
 
 /*
  * 

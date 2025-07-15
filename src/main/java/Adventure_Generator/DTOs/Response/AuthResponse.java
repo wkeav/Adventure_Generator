@@ -1,4 +1,4 @@
-package Adventure_Generator.DTOs.Response;
+package Adventure_generator.DTOs.Response;
 
 public class AuthResponse {
     private boolean success;

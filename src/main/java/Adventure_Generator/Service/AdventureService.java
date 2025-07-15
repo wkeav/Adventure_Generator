@@ -1,4 +1,4 @@
-package Adventure_Generator.Service;
+package Adventure_generator.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import Adventure_Generator.POJO.AdventureIdea;
+import Adventure_generator.POJO.AdventureIdea;
 import jakarta.annotation.PostConstruct;
 
 @Service

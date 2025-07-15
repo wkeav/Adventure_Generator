@@ -1,4 +1,4 @@
-package Adventure_Generator.Config;
+package Adventure_generator.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

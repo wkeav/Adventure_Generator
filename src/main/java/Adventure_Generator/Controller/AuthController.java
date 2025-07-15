@@ -1,11 +1,5 @@
-package Adventure_Generator.Controller;
+package Adventure_generator.Controller;
 
-import Adventure_Generator.DTOs.Requests.LoginRequest;
-import Adventure_Generator.DTOs.Requests.RegisterRequest;
-import Adventure_Generator.DTOs.Response.AuthResponse;
-import Adventure_Generator.DTOs.Response.UserData;
-import Adventure_Generator.Model.User;
-import Adventure_Generator.Service.AuthenticationService;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -17,6 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import Adventure_generator.DTOs.Requests.LoginRequest;
+import Adventure_generator.DTOs.Requests.RegisterRequest;
+import Adventure_generator.DTOs.Response.AuthResponse;
+import Adventure_generator.DTOs.Response.UserData;
+import Adventure_generator.Model.User;
+import Adventure_generator.Service.AuthenticationService;
 
 
 

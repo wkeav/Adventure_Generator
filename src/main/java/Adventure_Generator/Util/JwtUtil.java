@@ -1,4 +1,4 @@
-package Adventure_Generator.Util;
+package Adventure_generator.Util;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -13,7 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import Adventure_Generator.DTOs.Response.UserData;
+import Adventure_generator.DTOs.Response.UserData;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,14 +30,14 @@ public class JwtUtil implements Serializable {
     // Generate token
     public String generateToken(UserData userData){
         Map<String,Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userData.getUserName());        
+        return doGenerateToken(claims, userData.getUserName(),JWT_TOKEN_VALIDITY);        
     }
-    private String doGenerateToken(Map<String,Object> claim,  String userName){
+    private String doGenerateToken(Map<String,Object> claim,  String userName, long expiryMillis){
         return Jwts.builder()
             .setClaims(claim)
             .setSubject(userName) // User's identity 
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+            .setExpiration(new Date(System.currentTimeMillis() + expiryMillis * 1000))
             .signWith(getSigningKey(), SignatureAlgorithm.HS512) 
             .compact(); 
     }
@@ -72,5 +72,8 @@ public class JwtUtil implements Serializable {
     }
     public Date getExpirationDateFromToken(String token){
         return getClaimFromToken(token, Claims::getExpiration);
+    }
+    public String generateTokenWithCustomExpiry(UserData userData, long expiryMillis){
+        return doGenerateToken(new HashMap<>(), userData.getUserName(), expiryMillis);
     }
 }

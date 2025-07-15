@@ -1,4 +1,4 @@
-package Adventure_Generator;
+package Adventure_generator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ public class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // Register 
     @Test 
     public void testRegisterUser_Success() throws Exception{
         String json = "{ \"email\": \"autotest1@example.com\", \"password\": \"pass1234\", \"confirmPassword\": \"pass1234\", \"userName\": \"AutoTest1\" }";
@@ -38,5 +37,4 @@ public class AuthControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value(false));
     }
-
 }
