@@ -40,7 +40,7 @@ export class AdventureGenerator {
         // AJAX with fetch API 
         try{
             this.startLoading();
-            const response = await fetch('/generate-adventure',{
+            const response = await fetch('/api/adventures/generate',{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json'

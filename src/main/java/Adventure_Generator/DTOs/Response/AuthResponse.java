@@ -3,12 +3,14 @@ package Adventure_generator.DTOs.Response;
 public class AuthResponse {
     private boolean success;
     private String message;
+    private String token;
     private UserData userData;
     private String error;
 
-    public AuthResponse(boolean success, String message, UserData userData, String error) {
+    public AuthResponse(boolean success, String message, String token, UserData userData, String error) {
         this.success = success;
         this.message = message;
+        this.token = token;
         this.userData = userData;
         this.error = error;
     }
@@ -47,8 +49,16 @@ public class AuthResponse {
 
     @Override
     public String toString() {
-        return "AuthResponse [success=" + success + ", message=" + message + ", userData=" + userData + ", error="
-                + error + "]";
+        return "AuthResponse [success=" + success + ", message=" + message + ", token=" + token + ", userData="
+                + userData + ", error=" + error + "]";
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
     
     

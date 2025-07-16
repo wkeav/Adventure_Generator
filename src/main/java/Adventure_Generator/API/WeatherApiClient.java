@@ -35,10 +35,10 @@ public class WeatherApiClient {
 
         // Extracting only what we need
         Map<String, Object> main = (Map<String,Object>) rawResponse.get("main");
-        double tempKelvin = (double) main.get("temp");
-        double tempCelsius = tempKelvin - 273.15;
-        double feelsLikeKelvin = ((Number) main.get("feels_like")).doubleValue();
-        double feelsLikeCelsius = feelsLikeKelvin - 273.15;
+        Double tempKelvin = ((Number) main.get("temp")).doubleValue();
+        Double tempCelsius = tempKelvin - 273.15;
+        Double feelsLikeKelvin = ((Number) main.get("feels_like")).doubleValue();
+        Double feelsLikeCelsius = feelsLikeKelvin - 273.15;
 
         List<Map<String,Object>> weatherList = (List<Map<String, Object>>)rawResponse.get("weather");
         Map<String,Object> weather = weatherList.get(0);

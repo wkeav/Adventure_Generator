@@ -51,9 +51,9 @@ public class JwtUtil implements Serializable {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
-    public Boolean validateToken(String token, UserData userData){
+    public Boolean validateToken(String token, String username){
         final String userName = getUsernameFromToken(token);
-        return (userName.equals(userData.getUserName()) && !isTokenExpired(token));
+        return (userName.equals(userName) && !isTokenExpired(token));
     }
 
     // Secret key is needed 

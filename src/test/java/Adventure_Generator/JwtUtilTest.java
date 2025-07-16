@@ -30,7 +30,7 @@ public class JwtUtilTest {
         String username = jwtUtil.getUsernameFromToken(token);
         assertEquals("Test", username);
         
-        assertTrue(jwtUtil.validateToken(token, userData));
+        assertTrue(jwtUtil.validateToken(token, username));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class JwtUtilTest {
         String token = jwtUtil.generateTokenWithCustomExpiry(userData, 1); // 1 second 
 
         Thread.sleep(2000); // for token to be expired
-        assertFalse(jwtUtil.validateToken(token, userData));
+        assertFalse(jwtUtil.validateToken(token, userData.getUserName()));
     }
 
     @Test
@@ -48,14 +48,14 @@ public class JwtUtilTest {
         UserData userData2 = new UserData(2,"test2@test.com", "Test2", LocalDateTime.now());
         String token = jwtUtil.generateToken(userData1);
 
-        assertFalse(jwtUtil.validateToken(token, userData2));
+        assertFalse(jwtUtil.validateToken(token, userData2.getUserName()));
     }
 
     @Test
     public void testInvalidToken() {
         UserData userData = new UserData(1,"test@test.com", "Test", LocalDateTime.now());
         String fakeToken = "not.a.jwt";
-        assertFalse(jwtUtil.validateToken(fakeToken, userData));
+        assertFalse(jwtUtil.validateToken(fakeToken, userData.getUserName()));
     }
 
 }
