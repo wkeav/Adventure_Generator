@@ -52,11 +52,11 @@ export class AdventureGenerator {
             }
             const data = await response.json(); // response data 
 
-            // Update UI with backend data 
             const adventureElement = document.getElementById('adventure-description');
             const moodElement = document.getElementById('mood-text');
             // console.log('Found elements:', {adventureElement, moodElement}); 
 
+            // Update UI with backend data 
             adventureElement.textContent = data.adventureIdea;
             moodElement.textContent = selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1);
 

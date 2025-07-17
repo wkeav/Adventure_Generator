@@ -283,27 +283,6 @@ View All
 </div> 
 </div>
 
-<!-- User Auth Modal/Dropdown -->
-<div id="auth-modal" style="position:fixed; top:2rem; right:2rem; z-index:1000;">
-  <div class="auth-box">
-    <div id="auth-tabs">
-      <button id="show-login" class="auth-tab active">Login</button>
-      <button id="show-register" class="auth-tab">Register</button>
-    </div>
-    <form id="login-form" class="auth-form">
-      <input type="email" id="login-email" placeholder="Email" required />
-      <input type="password" id="login-password" placeholder="Password" required />
-      <button type="submit">Login</button>
-      <div id="login-message"></div>
-    </form>
-    <form id="register-form" class="auth-form" style="display:none;">
-      <input type="text" id="register-username" placeholder="Username" required />
-      <input type="email" id="register-email" placeholder="Email" required />
-      <input type="password" id="register-password" placeholder="Password" required />
-      <button type="submit">Register</button>
-      <div id="register-message"></div>
-    </form>
-  </div>
 </div>
 <style>
   .auth-box {
@@ -366,30 +345,6 @@ View All
     text-align: center;
   }
 </style>
-<script>
-  // Toggle between login/register
-  document.getElementById('show-login').onclick = function() {
-    document.getElementById('login-form').style.display = 'flex';
-    document.getElementById('register-form').style.display = 'none';
-    this.classList.add('active');
-    document.getElementById('show-register').classList.remove('active');
-  };
-  document.getElementById('show-register').onclick = function() {
-    document.getElementById('login-form').style.display = 'none';
-    document.getElementById('register-form').style.display = 'flex';
-    this.classList.add('active');
-    document.getElementById('show-login').classList.remove('active');
-  };
-  // Placeholder submit handlers
-  document.getElementById('login-form').onsubmit = function(e) {
-    e.preventDefault();
-    document.getElementById('login-message').textContent = 'Logged in! (simulate)';
-  };
-  document.getElementById('register-form').onsubmit = function(e) {
-    e.preventDefault();
-    document.getElementById('register-message').textContent = 'Registered! (simulate)';
-  };
-</script>
 <script type="module" src="/js/main.js"></script>
 </body>
 </html>
