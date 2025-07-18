@@ -27,15 +27,16 @@ public class AuthenticationService {
     public boolean isRegisteredUser(String email){
         return userRepository.existsByEmail(email);
     }
+
     // User's register - validate user
     public User registerUser(String email, String password, String userName){
-        if(isRegisteredUser(email)){
+        if(isRegisteredUser(email.toLowerCase())){
             throw new RuntimeException("An account has already been made with this email.");
         }
 
         // Create new user
         User newUser = new User();
-        newUser.setEmail(email);
+        newUser.setEmail(email.toLowerCase());
         newUser.setPassword(passwordEncoder.encode(password));
         newUser.setUserName(userName);
         newUser.setCreatedAt(LocalDateTime.now());
@@ -45,7 +46,7 @@ public class AuthenticationService {
     }
 
     public User findUserByEmail(String email, String password){
-        Optional<User> userOptional = userRepository.findByEmail(email);
+        Optional<User> userOptional = userRepository.findByEmail(email.toLowerCase());
         
         if(userOptional.isPresent()){
             User user = userOptional.get();

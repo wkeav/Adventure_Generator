@@ -98,7 +98,7 @@ export class userAuth {
                             messageDiv.style.color = "green";
                             setTimeout(() => {
                                 window.location.href = "/home.html"; 
-                            }, 1500);
+                            }, 3000);
                         }else{
                             messageDiv.textContent = result.message || "Registration failed. Please try again.";
                             messageDiv.style.color = "red";
@@ -121,7 +121,7 @@ export class userAuth {
 
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
-                const messageDiv = document.getElementById('register-message');
+                const messageDiv = document.getElementById('login-message');
 
                 try{
                     const result = await this.login(email,password);
@@ -130,9 +130,9 @@ export class userAuth {
                         messageDiv.style.color = "green";
                         setTimeout(() => {
                             window.location.href = "/home.html"; 
-                        }, 1500);
+                        }, 3000);
                     }else{
-                        messageDiv.textContent = result.message || "Login failed. Please try again.";
+                        messageDiv.textContent = result.message || "Invalid password or email. Please try again.";
                         messageDiv.style.color = "red";
                     }
                 }finally{

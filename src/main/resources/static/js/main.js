@@ -18,7 +18,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Always initialize userAuth 
     const auth = new userAuth();
-    auth.RegisterValidation();
+    if (document.getElementById('register-form')) {
+        auth.RegisterValidation();
+    }
     auth.registerForm();
     auth.loginForm();
+
+    // Show user profile if on home page
+    const userProfileDiv = document.getElementById('user-profile');
+    if (userProfileDiv) {
+        const userData = localStorage.getItem('userData');
+        let userName = '';
+        if (userData) {
+            try {
+                const user = JSON.parse(userData);
+                userName = user.userName;
+            } catch (e) {
+                userName = '';
+            }
+        }
+        console.log('userName:', userName);
+        userProfileDiv.innerHTML = userName
+            ? `<span class="material-symbols-outlined" style="color: black;">account_circle</span><span class="font-semibold" style="color: black;">${userName}</span>`
+            : '<span style="color: black;">Not logged in</span>';
+    }
+
+
 }); 

@@ -11,10 +11,17 @@
 <body>
 <div id="webcrumbs"> 
         <div class="w-full max-w-[1200px] mx-auto bg-gradient-to-br from-amber-50 to-orange-100 p-4 sm:p-6 md:p-8 rounded-xl font-sans">
-            <header class="text-center mb-10">
-                <h1 class="text-4xl font-bold text-amber-800 mb-2">Cozy Adventure Generator</h1>
-                <p class="text-lg text-amber-700">Create memorable moments together based on your mood and the weather</p>
-</header>
+            <header class="mb-10 flex items-center justify-between">
+                <div class="w-1/4"></div>
+                <div class="w-2/4 text-center">
+                    <h1 class="text-4xl font-bold text-amber-800 mb-2">Cozy Adventure Generator</h1>
+                    <p class="text-lg text-amber-700">Create memorable moments together based on your mood and the weather</p>
+                </div>
+                <div class="w-1/4 flex justify-end">
+                    <div id="user-profile" class="bg-white rounded-xl shadow-md px-6 py-3 flex items-center gap-3 ml-4" style="min-width: 200px;">
+                    </div>
+                </div>
+            </header>
 
             <div class="flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-8">
                 <aside class="w-full lg:w-1/4">
@@ -243,20 +250,13 @@ View All
           </select>
         </label>
       </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm">Accessibility Needs</span>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" value="" class="sr-only peer" />
-                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
-        </label>
-      </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm">Kid-Friendly Options</span>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" value="" class="sr-only peer" checked />
-                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
-        </label>
-      </div>
+        <div>
+            <label class="flex items-center justify-between cursor-pointer">
+                <span class="text-sm">Long Distance Adventures</span>
+                <input type="checkbox" id="long-distance-pref" class="sr-only peer" />
+                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+            </label>
+        </div>
     </div>
   </div>
 
