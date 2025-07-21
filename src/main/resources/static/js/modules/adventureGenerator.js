@@ -37,6 +37,9 @@ export class AdventureGenerator {
             return;
         }
 
+        const weather = document.getElementById('weather-description')?.textContent?.toLowerCase() || '';
+        const longDistance = localStorage.getItem('longDistance') === 'true';
+
         // AJAX with fetch API 
         try{
             this.startLoading();
@@ -45,7 +48,11 @@ export class AdventureGenerator {
                 headers:{
                     'Content-Type': 'application/json'
                 },
-                body:JSON.stringify({mood: selectedMood})
+                body:JSON.stringify({
+                    mood: selectedMood,
+                    weather: weather,
+                    longDistance: longDistance
+                })
             });
             if(!response.ok){
                 throw new Error(`HTTP error! status: ${response.status}`);

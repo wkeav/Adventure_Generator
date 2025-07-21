@@ -9,6 +9,7 @@ public class AdventureRequest {
     private double latitude;
     private String mood;
     private String weather;
+    private Boolean longDistance; 
 
     // Constructor
     public AdventureRequest(){
@@ -17,11 +18,13 @@ public class AdventureRequest {
         this.mood = "Neutral"; 
         this.weather = "clear";
     }
-    public AdventureRequest(double lon, double lat, String mood, String weather){
-        this.longitude = lon;
-        this.latitude = lat;
+
+    public AdventureRequest(double longitude, double latitude, String mood, String weather, Boolean longDistance) {
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.mood = mood;
         this.weather = weather;
+        this.longDistance = longDistance;
     }
     // Getter & setter
     public double getLongitude() {
@@ -58,8 +61,15 @@ public class AdventureRequest {
     @Override
     public String toString() {
         return "AdventureRequest [longitude=" + longitude + ", latitude=" + latitude + ", mood=" + mood + ", weather="
-                + weather + "]";
+                + weather + ", longDistance=" + longDistance + "]";
     }
+    public Boolean getLongDistance() {
+        return longDistance;
+    }
+    public void setLongDistance(Boolean longDistance) {
+        this.longDistance = longDistance;
+    }
+  
 
     
 }

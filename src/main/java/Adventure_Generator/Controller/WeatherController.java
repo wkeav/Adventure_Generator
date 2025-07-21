@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class WeatherController {
-    @Autowired
-    private WeatherService weatherService;
+    private final WeatherService weatherService;
 
-    @GetMapping("/api/weather")
+    public WeatherController(WeatherService weatherService){
+        this.weatherService = weatherService;
+    }
+
+    @GetMapping(value = "/api/weather", produces = "application/json")
     public WeatherResponse getWeather(@RequestParam double lat, double lon) {
         return weatherService.getCurrentWeather(lat,lon);
         }

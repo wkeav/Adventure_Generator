@@ -17,18 +17,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping(path = "/api/adventures")
 public class AdventureController {
-    AdventureResponse adventureResponse;
-    @Autowired
-    AdventureService adventureService;
+
+    private final AdventureService adventureService;
+
+    public AdventureController(AdventureService adventureService){
+        this.adventureService = adventureService;
+    }
 
     @PostMapping(value = "/generate" ,produces = "application/json", consumes = "application/json")
-    public ResponseEntity<?> generateAdventure(@RequestBody AdventureRequest adventureRequest) {
+    public ResponseEntity<AdventureResponse> generateAdventure(@RequestBody AdventureRequest adventureRequest) {
         String mood = adventureRequest.getMood();
         String weather = adventureRequest.getWeather();
+        Boolean longDistance = adventureRequest.getLongDistance();
 
-        String adventure = adventureService.generateAdventure(mood, weather);
-        AdventureResponse response = new AdventureResponse(adventure, 0, "N/A");
-        return ResponseEntity.ok(response);
+        try{
+            if(mood != null && weather != null){
+                String adventure = adventureService.generateAdventure(mood, weather,longDistance);
+                AdventureResponse adventureResponse = new AdventureResponse(adventure, 0, "N/A");
+                return ResponseEntity.ok(adventureResponse);
+            }else{
+                return ResponseEntity.badRequest()
+                    .body(new AdventureResponse("Mood and weather are required.", 0, "N/A"));
+            }
+        }catch(Exception e){
+            return ResponseEntity.status(500)
+            .body(new AdventureResponse("An error occurred while generating adventure.", 0, "N/A"));
+        }
+
     }
     
     

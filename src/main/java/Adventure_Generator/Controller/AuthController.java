@@ -25,13 +25,18 @@ import Adventure_generator.Util.JwtUtil;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    AuthenticationService authenticationService;
-    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
-    @Autowired
-    JwtUtil jwtUtil;
+    private final AuthenticationService authenticationService;
+    private final JwtUtil jwtUtil;
 
-    @PostMapping("/register")
+    
+    public AuthController(AuthenticationService authenticationService, JwtUtil jwtUtil) {
+        this.authenticationService = authenticationService;
+        this.jwtUtil = jwtUtil;
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+
+    @PostMapping(value = "/register", produces = "application/json", consumes = "application/json")
     public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
 
         String email = registerRequest.getEmail();
@@ -63,7 +68,7 @@ public class AuthController {
         }
     }
     
-    @PostMapping("/login")
+    @PostMapping(value = "/login", produces = "application/json", consumes = "application/json")
     public ResponseEntity<AuthResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();

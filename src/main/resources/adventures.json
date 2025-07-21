@@ -81,6 +81,7 @@
     { "mood": "romantic", "weather": "snow", "adventure": "Build a snow sculpture together, like a heart or your initials." },
     { "mood": "romantic", "weather": "snow", "adventure": "Visit a cozy mountain lodge for a weekend getaway." },
     { "mood": "romantic", "weather": "snow", "adventure": "Take a winter photography session together in the snow." },
+    
     { "mood": "happy", "weather": "any", "distance": "long-distance", "adventure": "Watch a movie together online and chat during the film." },
     { "mood": "romantic", "weather": "any", "distance": "long-distance", "adventure": "Write each other a letter and read it together over a video call." },
     { "mood": "relaxed", "weather": "any", "distance": "long-distance", "adventure": "Have a virtual coffee date and talk about your day." },
