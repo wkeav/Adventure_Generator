@@ -24,7 +24,7 @@ public class AdventureController {
         this.adventureService = adventureService;
     }
 
-    @PostMapping(value = "/generate" ,produces = "application/json", consumes = "application/json")
+    @PostMapping(value = "/generate" ,produces = "application/json")
     public ResponseEntity<AdventureResponse> generateAdventure(@RequestBody AdventureRequest adventureRequest) {
         String mood = adventureRequest.getMood();
         String weather = adventureRequest.getWeather();

@@ -37,8 +37,20 @@ export class AdventureGenerator {
             return;
         }
 
-        const weather = document.getElementById('weather-description')?.textContent?.toLowerCase() || '';
-        const longDistance = localStorage.getItem('longDistance') === 'true';
+        const weatherDesc = document.getElementById('weather-description')?.textContent?.toLowerCase() || '';
+        const longDistance = localStorage.getItem('longDistancePref') === 'true';
+
+        // Map weather description to adventures JSON 
+        let weather = 'clear'; // default 
+        if (weatherDesc.includes('rain') || weatherDesc.includes('drizzle') || weatherDesc.includes('shower') || weatherDesc.includes('mist')) {
+            weather = 'rain';
+        } else if (weatherDesc.includes('snow')) {
+            weather = 'snow';
+        } else if (weatherDesc.includes('clear') || weatherDesc.includes('sunny') || weatherDesc.includes('sky')) {
+            weather = 'clear';
+        } else {
+            weather = 'any'; 
+        }
 
         // AJAX with fetch API 
         try{

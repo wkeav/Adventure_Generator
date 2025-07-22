@@ -4,7 +4,7 @@ public class AdventureIdea {
     private String mood;
     private String weather;
     private String adventure;
-    private String longDistance;
+    private String distance;
     
     public String getMood() {
         return mood;
@@ -24,12 +24,13 @@ public class AdventureIdea {
     public void setAdventure(String adventure) {
         this.adventure = adventure;
     }
-    public String getLongDistance() {
-        return longDistance;
+    public String getDistance() {
+        return distance;
     }
-    public void setLongDistance(String longDistance) {
-        this.longDistance = longDistance;
+    public void setDistance(String distance) {
+        this.distance = distance;
     }
+    
 
 
 }

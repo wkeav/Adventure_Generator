@@ -69,31 +69,25 @@ public class AdventureService {
         
     }
 
-    public String generateAdventure(String mood,String weather,boolean longDistance){
-        // Filter the list for matching mood and weather
+    public String generateAdventure(String mood, String weather, boolean longDistance){
         List<AdventureIdea> filteredList = adventureIdeas.stream()
-            .filter(a -> a.getMood().equalsIgnoreCase(mood) && a.getWeather().equalsIgnoreCase(weather)|| a.getWeather().equalsIgnoreCase("any"))
-            .filter(a -> { // Long distance option
-                String distance = a.getLongDistance();
+            .filter(a -> a.getMood().equalsIgnoreCase(mood) && (a.getWeather().equalsIgnoreCase(weather) || a.getWeather().equalsIgnoreCase("any")))
+            .filter(a -> {
+                String distance = a.getDistance();
                 if(longDistance){
                     return "long-distance".equalsIgnoreCase(distance);
                 }else{
-                    return distance == null || !"long-distance".equalsIgnoreCase(distance);
+                    return distance == null;
                 }
             })
             .toList();
 
-            if (filteredList.isEmpty()) {
-                return "No adventure found for this mood and weather!";
-            }
+        if(filteredList.isEmpty()){
+            return "No adventure found for this mood, weather, and preference!";
+        }
 
-        // Pick a random adventure 
-        int index = (int) (Math.random() * filteredList.size());
+        // Generate random adventures 
+        int index = (int)(Math.random() * filteredList.size());
         return filteredList.get(index).getAdventure();
-        
-
     }
-
-   
-
 }

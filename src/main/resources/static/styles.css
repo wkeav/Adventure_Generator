@@ -878,3 +878,33 @@ video {
     rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
     scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
+
+/* Long Distance Adventure Toggle - Custom Styling */
+#long-distance-pref:checked + div {
+    background-color: #10b981 !important; /* Green-500 when ON */
+}
+
+#long-distance-pref:not(:checked) + div {
+    background-color: #d1d5db !important; /* Gray-300 when OFF */
+}
+
+/* Make the toggle circle more visible and smooth */
+#long-distance-pref + div::after {
+    transition: all 0.3s ease !important;
+    background-color: white !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+#long-distance-pref:checked + div::after {
+    transform: translateX(100%) !important;
+}
+
+#long-distance-pref:not(:checked) + div::after {
+    transform: translateX(0) !important;
+}
+
+/* Add hover effect for better UX */
+#long-distance-pref + div:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}

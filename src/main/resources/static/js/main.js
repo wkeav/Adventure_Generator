@@ -43,5 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
             : '<span style="color: black;">Not logged in</span>';
     }
 
+    // Long distance preference
+    const longDistancePref = document.getElementById('long-distance-pref');
+    if(longDistancePref){
+        const distancePref = localStorage.getItem('longDistancePref');
+        longDistancePref.checked = distancePref === 'true'; // Set the checkbox to true or false 
+
+        longDistancePref.addEventListener('change', (e) => {
+            localStorage.setItem('longDistancePref', e.target.checked);
+        });
+    }
+
 
 }); 
