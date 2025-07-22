@@ -170,7 +170,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Author
 
 **Astra Ng.**
-- LinkedIn: [Astra's LinkedIn](www.linkedin.com/in/astra-n-40b024259)
+- LinkedIn: [Astra's LinkedIn](www.linkedin.com/in/astra-n-40b024259/)
 - Email: astra.k.nguyen05@outlook.com
 
 
