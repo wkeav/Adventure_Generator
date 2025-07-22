@@ -31,7 +31,7 @@ Adventure Generator is a full-stack web application that combines mood-based rec
 - **Java 17** with **Spring Boot 3.x**
 - **Spring Security** with JWT authentication
 - **JPA/Hibernate** for database operations
-- **PostgreSQL** for production (H2 for development)
+- **PostgreSQL** for production 
 - **Maven** for dependency management
 - **Jackson** for JSON processing
 
@@ -51,7 +51,7 @@ Adventure Generator is a full-stack web application that combines mood-based rec
 ### Prerequisites
 - Java 17 or higher
 - Maven 3.6+
-- PostgreSQL 12+ (or use H2 for development)
+- PostgreSQL 12+ 
 - OpenWeather API key (free at [openweathermap.org](https://openweathermap.org/api))
 
 ### Installation
