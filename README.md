@@ -1,10 +1,13 @@
-# Adventure Generator 🌟
+# Adventure Generator 
 
 A personalized adventure recommendation platform that helps couples and friends discover meaningful activities based on their mood and the weather conditions. 
 
 ## Overview
 
 Adventure Generator is a full-stack web application that combines mood-based recommendations with real-time weather data to suggest perfect activities for couples and friends. Whether you're together or miles apart, find your next memorable adventure!
+
+<img width="1022" height="760" alt="Screenshot 2025-07-22 at 15 58 56" src="https://github.com/user-attachments/assets/781abbe6-18d5-484a-b375-7786407fac95" />
+<img width="578" height="690" alt="Screenshot 2025-07-22 at 15 59 25" src="https://github.com/user-attachments/assets/2f3dd67e-96d4-4a70-89bb-9d1f3c78e310" />
 
 ## Features
 
@@ -28,7 +31,7 @@ Adventure Generator is a full-stack web application that combines mood-based rec
 - **Java 17** with **Spring Boot 3.x**
 - **Spring Security** with JWT authentication
 - **JPA/Hibernate** for database operations
-- **PostgreSQL** for production (H2 for development)
+- **PostgreSQL** for production 
 - **Maven** for dependency management
 - **Jackson** for JSON processing
 
@@ -48,7 +51,7 @@ Adventure Generator is a full-stack web application that combines mood-based rec
 ### Prerequisites
 - Java 17 or higher
 - Maven 3.6+
-- PostgreSQL 12+ (or use H2 for development)
+- PostgreSQL 12+ 
 - OpenWeather API key (free at [openweathermap.org](https://openweathermap.org/api))
 
 ### Installation
@@ -167,7 +170,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Author
 
 **Astra Ng.**
-- LinkedIn: [Astra's LinkedIn](www.linkedin.com/in/astra-n-40b024259)
+- LinkedIn: [Astra's LinkedIn](www.linkedin.com/in/astra-n-40b024259/)
 - Email: astra.k.nguyen05@outlook.com
 
 
