@@ -29,6 +29,13 @@ public class User {
     private String password;
     @Column
     private LocalDateTime createdAt;
+    @Column(name="email_is_verified", nullable=false)
+    private boolean emailVerified;
+    @Column(name="verification_token")
+    private boolean verificationToken;
+    @Column(name="verification_token_expiry")
+    private LocalDateTime  verificationTokenExpiry;
+    
 
     public User(){
     }
@@ -75,7 +82,38 @@ public class User {
     @Override
     public String toString() {
         return "User [id=" + id + ", email=" + email + ", userName=" + userName + ", password=" + password
-                + ", createdAt=" + createdAt + "]";
+                + ", createdAt=" + createdAt + ", emailVerified=" + emailVerified + ", verificationToken="
+                + verificationToken + ", verificationTokenExpiry=" + verificationTokenExpiry + "]";
+    }
+
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+
+    public boolean isVerificationToken() {
+        return verificationToken;
+    }
+
+
+    public void setVerificationToken(boolean verificationToken) {
+        this.verificationToken = verificationToken;
+    }
+
+
+    public LocalDateTime getVerificationTokenExpiry() {
+        return verificationTokenExpiry;
+    }
+
+
+    public void setVerificationTokenExpiry(LocalDateTime verificationTokenExpiry) {
+        this.verificationTokenExpiry = verificationTokenExpiry;
     }
 
 }
