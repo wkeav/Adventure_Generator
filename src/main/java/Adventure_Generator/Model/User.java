@@ -32,7 +32,7 @@ public class User {
     @Column(name="email_is_verified", nullable=false)
     private boolean emailVerified;
     @Column(name="verification_token")
-    private boolean verificationToken;
+    private String verificationToken;
     @Column(name="verification_token_expiry")
     private LocalDateTime  verificationTokenExpiry;
     
@@ -96,13 +96,12 @@ public class User {
         this.emailVerified = emailVerified;
     }
 
-
-    public boolean isVerificationToken() {
+    public String getVerificationToken() {
         return verificationToken;
     }
 
 
-    public void setVerificationToken(boolean verificationToken) {
+    public void setVerificationToken(String verificationToken) {
         this.verificationToken = verificationToken;
     }
 
