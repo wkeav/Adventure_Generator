@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import Adventure_generator.Model.User;
 import Adventure_generator.Repository.UserRepository;
+import Adventure_generator.Util.EmailVerificationUtil;
 
 /*
  * Handles all authentication related business logic - User registration and user login
@@ -20,6 +21,8 @@ import Adventure_generator.Repository.UserRepository;
 public class AuthenticationService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private EmailVerificationUtil emailVerificationUtil;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -41,17 +44,39 @@ public class AuthenticationService {
         newUser.setUserName(userName);
         newUser.setCreatedAt(LocalDateTime.now());
 
+        // Email verification 
+        String emailVerification = emailVerificationUtil.generateVerificationToken();
+        newUser.setEmailVerified(false);
+        newUser.setVerificationToken(emailVerification);
+        newUser.setVerificationTokenExpiry(emailVerificationUtil.getTokenExpire());
+
         return userRepository.save(newUser);
 
     }
+    public boolean verifyEmail(String token){
+        Optional<User> findUser = userRepository.findByVerificationToken(token);
+        if(findUser.isPresent()){ // User exist 
+            User user = findUser.get();
+            if(!emailVerificationUtil.isTokenExpired(user.getVerificationTokenExpiry())){ // Before it expired
+                user.setEmailVerified(true);
+                user.setVerificationToken(null);
+                user.setVerificationTokenExpiry(null);
+                userRepository.save(user);
+                return true;
+            }
+        }
+        return false;
 
+    }
     public User findUserByEmail(String email, String password){
         Optional<User> userOptional = userRepository.findByEmail(email.toLowerCase());
         
         if(userOptional.isPresent()){
             User user = userOptional.get();
 
-            // Check if password matches 
+            if(!user.isEmailVerified()){
+                return null; // Can't login unless email is verified 
+            }
             if(passwordEncoder.matches(password,user.getPassword())){
                 return user;
             }

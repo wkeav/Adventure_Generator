@@ -86,7 +86,6 @@ public class User {
                 + verificationToken + ", verificationTokenExpiry=" + verificationTokenExpiry + "]";
     }
 
-
     public boolean isEmailVerified() {
         return emailVerified;
     }

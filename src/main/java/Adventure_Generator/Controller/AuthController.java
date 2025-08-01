@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +18,9 @@ import Adventure_generator.DTOs.Response.UserData;
 import Adventure_generator.Model.User;
 import Adventure_generator.Service.AuthenticationService;
 import Adventure_generator.Util.JwtUtil;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -49,16 +51,8 @@ public class AuthController {
                 return ResponseEntity.badRequest().body(errorAuthResponse);
             }
             User newUser = authenticationService.registerUser(email,password,userName); // Create new registered user 
-            
-            UserData userData = new UserData(
-                newUser.getId(),
-                newUser.getEmail(),
-                newUser.getUserName(),
-                newUser.getCreatedAt()
-            );
 
-            String token = jwtUtil.generateToken(userData);
-            AuthResponse authResponse = new AuthResponse(true, "User registered successfully", token, userData, null);
+            AuthResponse authResponse = new AuthResponse(true, "Registration successful! Please check your email to verify your account.", null, null, null);
             return ResponseEntity.status(HttpStatus.CREATED).body(authResponse);
 
         } catch(Exception e){
@@ -99,6 +93,25 @@ public class AuthController {
       }
     }
     
+    @GetMapping(value = "/verify-email", produces = "text")
+    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+        try{
+            if(token == null || token.isEmpty()){
+                return ResponseEntity.badRequest().body("Verification token is required.");
+            }
 
+            boolean isEmailVerified = authenticationService.verifyEmail(token);
+            if(isEmailVerified){
+                return ResponseEntity.ok("Email verified successfully! You can now log in.");
+            }else{
+                return ResponseEntity.badRequest().body("Invalid or expired verification token.");
+            }
+
+        } catch (Exception e){
+            log.error("Email verification failed for token: " + token,e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during email verification.");
+        }
+    }
+    
 
 } 
