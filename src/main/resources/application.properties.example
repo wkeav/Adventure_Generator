@@ -2,6 +2,8 @@ spring.application.name=Adventure_Generator
 
 # WEATHER 
 weather.api.key=YOUR_OPENWEATHERMAP_API_KEY
+# EMAIL
+email.api.key = YOUR_SENDGRID_API_KEY
 
 # PostgreSQL database configuration
 spring.datasource.url=jdbc:postgresql://localhost:5432/productdb
