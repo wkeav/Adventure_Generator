@@ -93,7 +93,7 @@ public class AuthController {
       }
     }
     
-    @GetMapping(value = "/verify-email", produces = "text")
+    @GetMapping(value = "/verify-email", produces = "text/plain")
     public ResponseEntity<String> verifyEmail(@RequestParam String token) {
         try{
             if(token == null || token.isEmpty()){

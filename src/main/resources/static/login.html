@@ -89,17 +89,47 @@
             <button id="show-login" class="auth-tab active">Login</button>
             <button id="show-register" class="auth-tab">Register</button>
         </div>
-        <form id="login-form" class="auth-form">
-            <input type="email" id="login-email" placeholder="Email" required />
-            <input type="password" id="login-password" placeholder="Password" required />
+        <form id="login-form" class="auth-form" autocomplete="on">
+            <input type="email" 
+                   id="login-email" 
+                   name="email"
+                   placeholder="Email" 
+                   autocomplete="email" 
+                   required />
+            <input type="password" 
+                   id="login-password" 
+                   name="password"
+                   placeholder="Password" 
+                   autocomplete="current-password" 
+                   required />
             <button type="submit">Login</button>
             <div id="login-message" class="auth-message"></div>
         </form>
-        <form id="register-form" class="auth-form" style="display:none;">
-            <input type="text" id="register-username" placeholder="Username" required />
-            <input type="email" id="register-email" placeholder="Email" required />
-            <input type="password" id="register-password" placeholder="Password" required />
-            <input type="password" id="register-confirm-password" placeholder="Confirm Password" required />
+        <form id="register-form" class="auth-form" style="display:none;" autocomplete="on">
+            <input type="text" 
+                   id="register-username" 
+                   name="username"
+                   placeholder="Username" 
+                   autocomplete="username" 
+                   required />
+            <input type="email" 
+                   id="register-email" 
+                   name="email"
+                   placeholder="Email" 
+                   autocomplete="email" 
+                   required />
+            <input type="password" 
+                   id="register-password" 
+                   name="password"
+                   placeholder="Password" 
+                   autocomplete="new-password" 
+                   required />
+            <input type="password" 
+                   id="register-confirm-password" 
+                   name="confirm-password"
+                   placeholder="Confirm Password" 
+                   autocomplete="new-password" 
+                   required />
             <button type="submit">Register</button>
             <div id="register-message" class="auth-message"></div>
         </form>
@@ -117,14 +147,6 @@
             document.getElementById('register-form').style.display = 'flex';
             this.classList.add('active');
             document.getElementById('show-login').classList.remove('active');
-        };
-        document.getElementById('login-form').onsubmit = function(e) {
-            e.preventDefault();
-            document.getElementById('login-message').textContent = 'Logged in! ';
-        };
-        document.getElementById('register-form').onsubmit = function(e) {
-            e.preventDefault();
-            document.getElementById('register-message').textContent = 'Registered! ';
         };
     </script>
     <script type="module" src="/js/main.js"></script>

@@ -98,7 +98,7 @@ export class userAuth {
                             messageDiv.style.color = "green";
                             setTimeout(() => {
                                 window.location.href = "/home.html"; 
-                            }, 3000);
+                            }, 2000);
                         }else{
                             messageDiv.textContent = result.message || "Registration failed. Please try again.";
                             messageDiv.style.color = "red";
@@ -128,9 +128,26 @@ export class userAuth {
                     if(result.success){
                         messageDiv.textContent = "Login successful!";
                         messageDiv.style.color = "green";
+
+                        const iframe = document.getElementById('iframe');
+                        iframe.style.display = 'none';
+                        iframe.name = 'password-save-frame';
+                        document.body.appendChild(iframe); // add it to the HTML page 
+                        
+                        // Clone form with user's data 
+                        const form = loginForm.cloneNode(true);
+                        form.target = 'password-save-frame';
+                        form.action = 'data:text/html,<script>parent.postMessage("success","*")</script>'; // Fake success
+                        form.style.display = 'none';
+                        document.body.appendChild(form);
+                        form.submit();
+
+                        
                         setTimeout(() => {
+                            document.body.removeChild(iframe);
+                            document.body.removeChild(form);
                             window.location.href = "/home.html"; 
-                        }, 3000);
+                        }, 2000);
                     }else{
                         messageDiv.textContent = result.message || "Invalid password or email. Please try again.";
                         messageDiv.style.color = "red";

@@ -5,6 +5,18 @@ import { getWeather } from './modules/getWeather.js';
 import{userAuth} from './modules/userAuth.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // Ensure user must have an account/ log in firsts 
+    if(window.location.pathname === '/home.html' || window.location.pathname === '/'){
+        const token = localStorage.getItem('jwtToken');
+        const userData = localStorage.getItem('userData');
+
+        if (!token || !userData) {
+            // No authentication then redirect to login
+            window.location.href = '/login.html';
+            return;
+        }
+    }
 
     if (document.getElementById('generate-btn')) {
         const moodHandler = new MoodHandler();
