@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 
 /*
  * This is a JPA entity, that maps directly to the database 
+ * This class represent users using the application
  */
 
 @Entity
