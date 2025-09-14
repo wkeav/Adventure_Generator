@@ -28,6 +28,7 @@ public class User {
     private String userName;
     @Column(nullable=false)
     private String password;
+
     @Column
     private LocalDateTime createdAt;
     @Column(name="email_is_verified", nullable=false)
@@ -80,6 +81,7 @@ public class User {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
     @Override
     public String toString() {
         return "User [id=" + id + ", email=" + email + ", userName=" + userName + ", password=" + password
@@ -87,6 +89,7 @@ public class User {
                 + verificationToken + ", verificationTokenExpiry=" + verificationTokenExpiry + "]";
     }
 
+    // Helper methods 
     public boolean isEmailVerified() {
         return emailVerified;
     }
