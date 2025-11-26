@@ -12,7 +12,7 @@
 	<artifactId>Adventure_Generator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Adventure_Generator</name>
-	<description>Developing an adventure generator with springboot. </description>
+	<description>Adventure generator that generates different adventures based on user's mood, weather and preferences. </description>
 	<url/>
 	<licenses>
 		<license/>

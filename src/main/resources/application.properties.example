@@ -1,20 +1,20 @@
-spring.application.name=Adventure_Generator
+SPRING.APPLICATION.NAME=Adventure_Generator
 
 # WEATHER 
-weather.api.key=YOUR_OPENWEATHERMAP_API_KEY
+WEATHER.API.KEY=YOUR_OPENWEATHERMAP_API_KEY
 # EMAIL
-email.api.key = YOUR_SENDGRID_API_KEY
+EMAIL.API.KEY=YOUR_SENDGRID_API_KEY
 
 # PostgreSQL database configuration
-spring.datasource.url=jdbc:postgresql://localhost:5432/productdb
-spring.datasource.username=postgres
-spring.datasource.password=yourpassword
-spring.datasource.driver-class-name=org.postgresql.Driver
+SPRING.DATASOURCE.URL=jdbc:postgresql://localhost:5432/productdb
+SPRING.DATASOURCE.USERNAME=postgres
+SPRING.DATASOURCE.PASSWORD=yourpassword
+SPRING.DATASOURCE.DRIVER-CLASS-NAME=org.postgresql.Driver
 
 # JPA configurations
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
+SPRING.JPA.HIBERNATE.DDL-AUTO=update
+SPRING.JPA.SHOW-SQL=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
 # JWT token
-jwt.secret = your_secret_token_here
+JWT.SECRET=your_secret_token_here
