@@ -5,8 +5,6 @@ A personalized adventure recommendation platform that helps couples and friends 
 ## Overview
 
 Adventure Generator is a full-stack web application that combines mood-based recommendations with real-time weather data to suggest perfect activities for couples and friends. Whether you're together or miles apart, find your next memorable adventure!
-
-<img width="1022" height="760" alt="Screenshot 2025-07-22 at 15 58 56" src="https://github.com/user-attachments/assets/781abbe6-18d5-484a-b375-7786407fac95" />
 <img width="578" height="690" alt="Screenshot 2025-07-22 at 15 59 25" src="https://github.com/user-attachments/assets/2f3dd67e-96d4-4a70-89bb-9d1f3c78e310" />
 
 ## Features
