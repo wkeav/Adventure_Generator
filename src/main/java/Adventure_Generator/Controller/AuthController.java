@@ -38,7 +38,7 @@ public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
-    @PostMapping(value = "/register", produces = "application/json", consumes = "application/json")
+    @PostMapping(value = "/registrations", produces = "application/json", consumes = "application/json")
     public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
 
         String email = registerRequest.getEmail();

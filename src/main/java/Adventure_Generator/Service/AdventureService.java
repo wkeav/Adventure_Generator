@@ -6,50 +6,32 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import Adventure_generator.Model.Adventure;
+import Adventure_generator.Model.User;
 import Adventure_generator.POJO.AdventureIdea;
+import Adventure_generator.Repository.AdventureRepository;
 import jakarta.annotation.PostConstruct;
 
+/**
+ * Service for generating and persisting adventure recommendations
+ * Loads adventure ideas from adventures.json and filters by mood/weather
+ */
 @Service
 public class AdventureService {
-    // private String [] happy_adventure = {
-    //     "Go to a museum, and explore!",
-    //     "Go to a comedy live show if available, if not watch a comedy show/movie! ",
-    //     "Have a picnic! drinks on the side + paint ", 
-    //     "Cook together ",
-    //     "Go on a walk and yap :D "
-    // };
-    // private String [] relaxed_adventure = {
-    //     "Visit a cafe and read some books or talk ",
-    //     "Enjoy a spa day with relaxing treatments ",
-    //     "Go stargazing ",
-    //     "Crafty nights ",
-    //     "Movie time! ", 
-    //     "Making playlists ",
-    //     "Crochet date "
-    // };
-    // private String [] energetic_adventure = {
-    //     "Go hiking and enjoy nature! ",
-    //     "Go for a run ", 
-    //     "Rent a bike and go explore! ",
-    //     "Try out a dance class ",
-    //     "Online gaming " 
-    // };
-    // private String [] romantic_adventure = {
-    //     "Take a sunset adventure ",
-    //     "Cook together ",
-    //     "Write each other letters ",
-    //     "Making playlists ",
-    //     "Visit a art gallery & hold hands hehe ",
-    //     "Buy each other takeout ",
-    // };
 
     private List<AdventureIdea> adventureIdeas;
 
+    @Autowired
+    private AdventureRepository adventureRepository;
+
+    /**
+     * Load adventure ideas from JSON file on startup.
+     */
     @PostConstruct
     public void loadAdventures(){
         ObjectMapper mapper = new ObjectMapper(); // Use to convert between Java objects and JSON
@@ -62,13 +44,14 @@ public class AdventureService {
         }
     }
 
-    public String getRandomAdventure(String[] adventure){
-        int index = (int) (Math.random() * adventure.length) ;
-        // System.out.println(index); 
-        return adventure[index];
-        
-    }
-
+    /**
+     * Generate a random adventure based on mood, weather, and distance preference.
+     * 
+     * @param mood the user's current mood
+     * @param weather the current weather condition
+     * @param longDistance whether it's a long-distance adventure
+     * @return adventure suggestion text
+     */
     public String generateAdventure(String mood, String weather, boolean longDistance){
         List<AdventureIdea> filteredList = adventureIdeas.stream()
             .filter(a -> a.getMood().equalsIgnoreCase(mood) && (a.getWeather().equalsIgnoreCase(weather) || a.getWeather().equalsIgnoreCase("any")))
@@ -86,8 +69,33 @@ public class AdventureService {
             return "No adventure found for this mood, weather, and preference!";
         }
 
-        // Generate random adventures 
+        // Generate random adventure and return
         int index = (int)(Math.random() * filteredList.size());
         return filteredList.get(index).getAdventure();
+    }
+    
+    /**
+     * Save a generated adventure to the database.
+     * 
+     * @param adventureText the adventure description
+     * @param user the user who generated this adventure
+     * @param mood the mood used for generation
+     * @param weather the weather condition
+     * @param isLongDistance whether it's a long-distance adventure
+     * @return the saved Adventure entity
+     */
+    public Adventure saveAdventure(String adventureText, User user, String mood, String weather, Boolean isLongDistance){
+        Adventure adventure = new Adventure(adventureText, user, mood, weather, isLongDistance);
+        return adventureRepository.save(adventure);
+    }
+
+    /**
+     * Get all adventures for a specific user, ordered by newest first.
+     * 
+     * @param userId the user's ID
+     * @return list of user's adventures
+     */
+    public List<Adventure> getUserAdventures(Long userId) {
+        return adventureRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 }

@@ -1,17 +1,20 @@
 package Adventure_generator.DTOs.Response;
 
+/**
+ * Response payload for generated adventures.
+ * Includes the adventure text, its persisted ID, and the requesting username.
+ */
 public class AdventureResponse {
     private String adventureIdea;
-    private double temperature;
-    private String weatherDescription;
+    private Long adventureId;
+    private String username;
 
-    // Constructor
-    public AdventureResponse(String adventureIdea, double temperature, String weatherDescription) {
+    public AdventureResponse(String adventureIdea, Long adventureId, String username) {
         this.adventureIdea = adventureIdea;
-        this.temperature = temperature;
-        this.weatherDescription = weatherDescription;
+        this.adventureId = adventureId;
+        this.username = username;
     }
-    // Getter & setter
+
     public String getAdventureIdea() {
         return adventureIdea;
     }
@@ -20,27 +23,25 @@ public class AdventureResponse {
         this.adventureIdea = adventureIdea;
     }
 
-    public double getTemperature() {
-        return temperature;
+    public Long getAdventureId() {
+        return adventureId;
     }
 
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
+    public void setAdventureId(Long adventureId) {
+        this.adventureId = adventureId;
     }
 
-    public String getWeatherDescription() {
-        return weatherDescription;
+    public String getUsername() {
+        return username;
     }
 
-    public void setWeatherDescription(String weatherDescription) {
-        this.weatherDescription = weatherDescription;
+    public void setUsername(String username) {
+        this.username = username;
     }
+
     @Override
     public String toString() {
-        return "AdventureResponse [adventureIdea=" + adventureIdea + ", temperature=" + temperature
-                + ", weatherDescription=" + weatherDescription + "]";
-    } 
-
-    
-    
+        return "AdventureResponse [adventureIdea=" + adventureIdea + ", adventureId=" + adventureId
+                + ", username=" + username + "]";
+    }
 }
