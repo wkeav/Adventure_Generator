@@ -55,15 +55,19 @@ public class Adventure {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name="is_favourite")
+    private Boolean isFavourite = false;
+
     // CONSTRUCTOR
     public Adventure(){}
 
-    public Adventure(String adventure, User user, String mood, String weather, Boolean isLongDistance) {
+    public Adventure(String adventure, User user, String mood, String weather, Boolean isLongDistance, Boolean isFavourite) {
         this.adventure = adventure;
         this.user = user;
         this.mood = mood;
         this.weather = weather;
         this.isLongDistance = isLongDistance != null ? isLongDistance : false;
+        this.isFavourite = false;
     }
 
     // JPA CALLBACKS
@@ -146,6 +150,14 @@ public class Adventure {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Boolean getIsFavourite() {
+        return isFavourite;
+    }
+
+    public void setIsFavourite(Boolean isFavourite){
+        this.isFavourite = isFavourite != null ? isFavourite : false;
     }
 
     // OBJECT METHODS

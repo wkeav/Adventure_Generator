@@ -17,31 +17,35 @@ export class userAuth {
     }
     async register(email,password,confirmPassword,userName){
         try{
-            const response = await fetch('/api/auth/register', {
+            const response = await fetch('/api/auth/registrations', {
                 method: "POST",
                 headers:{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({email,password,confirmPassword,userName})
             });
-            if(!response.ok){
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            
             const data = await response.json(); //convert to js object 
-            // Store user's data and token if success 
+            
+            // Return data regardless of status code - let the caller handle success/failure
             if(data.success && data.token){
-                this.saveToken(data.token); 
-                this.saveUserData(data.userData);
+                try {
+                    this.saveToken(data.token); 
+                    this.saveUserData(data.userData);
+                } catch (storageError) {
+                    console.error("Storage error:", storageError);
+                }
             }
             return data;
         }catch(error){
+            console.error("Registration error:", error);
             return {success: false, message: "Failed to register. Please try again."};
         }
     }
 
     async login(email,password){
         try{
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch('/api/auth/sessions', {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json'
@@ -177,17 +181,17 @@ export class userAuth {
         passwordInput.addEventListener('input', checkPasswordsMatch); // real-time check 
         confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
 
-        // Correct email format 
-        const checkEmail = () => {
-            const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
-            if(emailInput.value && !emailPattern.test(emailInput.value)){
-                messageDiv.textContent = "Please enter a valid email address.";
-                messageDiv.style.color = "red";
-            }else{
-                messageDiv.textContent = "";
-            }
-        }
-        emailInput.addEventListener('input', checkEmail);
+        // // Correct email format 
+        // const checkEmail = () => {
+        //     const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+        //     if(emailInput.value && !emailPattern.test(emailInput.value)){
+        //         messageDiv.textContent = "Please enter a valid email address.";
+        //         messageDiv.style.color = "red";
+        //     }else{
+        //         messageDiv.textContent = "";
+        //     }
+        // }
+        // emailInput.addEventListener('input', checkEmail);
     }
 
     saveToken(token){

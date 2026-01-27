@@ -30,12 +30,11 @@ class AdventureRepositoryTest {
         user.setUserName("repoUser");
         user.setPassword("password");
         user.setCreatedAt(LocalDateTime.now());
-        user.setEmailVerified(false);
         return userRepository.save(user);
     }
 
     private Adventure buildAdventure(User user, String adventureText, String mood, String weather, boolean longDistance) {
-        return adventureRepository.save(new Adventure(adventureText, user, mood, weather, longDistance));
+        return adventureRepository.save(new Adventure(adventureText, user, mood, weather, longDistance, false));
     }
 
     @Test

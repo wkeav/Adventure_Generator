@@ -41,7 +41,6 @@ class AdventureServiceTest {
         user.setUserName("serviceUser");
         user.setPassword("password");
         user.setCreatedAt(LocalDateTime.now());
-        user.setEmailVerified(true);
     }
 
     @Test
@@ -67,7 +66,7 @@ class AdventureServiceTest {
     @Test
     @DisplayName("getUserAdventures delegates to repository")
     void getUserAdventures_returnsList() {
-        Adventure adv = new Adventure("Read", user, "relaxed", "rain", true);
+        Adventure adv = new Adventure("Read", user, "relaxed", "rain", true, false);
         when(adventureRepository.findByUserIdOrderByCreatedAtDesc(user.getId())).thenReturn(List.of(adv));
 
         List<Adventure> result = adventureService.getUserAdventures(user.getId());

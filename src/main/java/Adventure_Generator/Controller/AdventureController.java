@@ -15,6 +15,7 @@ import Adventure_generator.DTOs.Requests.AdventureRequest;
 import Adventure_generator.DTOs.Response.AdventureResponse;
 import Adventure_generator.Model.Adventure;
 import Adventure_generator.Model.User;
+import Adventure_generator.Repository.UserRepository;
 import Adventure_generator.Service.AdventureService;
 
 
@@ -23,9 +24,11 @@ import Adventure_generator.Service.AdventureService;
 public class AdventureController {
 
     private final AdventureService adventureService;
+    private final UserRepository userRepository;
 
-    public AdventureController(AdventureService adventureService) {
+    public AdventureController(AdventureService adventureService, UserRepository userRepository) {
         this.adventureService = adventureService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -45,7 +48,9 @@ public class AdventureController {
                 
                 // Get currently authenticated user
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User currentUser = (User) authentication.getPrincipal();
+                String username = (String) authentication.getPrincipal();
+                User currentUser = userRepository.findByUserName(username)
+                    .orElseThrow(() -> new RuntimeException("User '" + username + "' not found in database. Please logout and register/login again."));
                 
                 // Save adventure to database
                 Adventure savedAdventure = adventureService.saveAdventure(
@@ -69,8 +74,12 @@ public class AdventureController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("ERROR in generateAdventure: " + e.getClass().getName() + ": " + e.getMessage());
+            if (e.getCause() != null) {
+                System.err.println("Caused by: " + e.getCause().getClass().getName() + ": " + e.getCause().getMessage());
+            }
             return ResponseEntity.status(500)
-                .body(new AdventureResponse("An error occurred while generating adventure.", 0L, "N/A"));
+                .body(new AdventureResponse("An error occurred while generating adventure: " + e.getMessage(), 0L, "N/A"));
         }
     }
     
@@ -83,7 +92,9 @@ public class AdventureController {
         try {
             // Get currently authenticated user
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            User currentUser = (User) authentication.getPrincipal();
+            String username = (String) authentication.getPrincipal();
+            User currentUser = userRepository.findByUserName(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
             
             // Fetch user's adventures
             List<Adventure> adventures = adventureService.getUserAdventures(currentUser.getId());

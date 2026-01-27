@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(unique=true, nullable=false)
     private String email;
@@ -31,12 +31,6 @@ public class User {
 
     @Column
     private LocalDateTime createdAt;
-    @Column(name="email_is_verified", nullable=false)
-    private boolean emailVerified;
-    @Column(name="verification_token")
-    private String verificationToken;
-    @Column(name="verification_token_expiry")
-    private LocalDateTime  verificationTokenExpiry;
     
 
     public User(){
@@ -85,37 +79,9 @@ public class User {
     @Override
     public String toString() {
         return "User [id=" + id + ", email=" + email + ", userName=" + userName + ", password=" + password
-                + ", createdAt=" + createdAt + ", emailVerified=" + emailVerified + ", verificationToken="
-                + verificationToken + ", verificationTokenExpiry=" + verificationTokenExpiry + "]";
-    }
-
-    // Helper methods 
-    public boolean isEmailVerified() {
-        return emailVerified;
+            + ", createdAt=" + createdAt + "]";
     }
 
 
-    public void setEmailVerified(boolean emailVerified) {
-        this.emailVerified = emailVerified;
-    }
-
-    public String getVerificationToken() {
-        return verificationToken;
-    }
-
-
-    public void setVerificationToken(String verificationToken) {
-        this.verificationToken = verificationToken;
-    }
-
-
-    public LocalDateTime getVerificationTokenExpiry() {
-        return verificationTokenExpiry;
-    }
-
-
-    public void setVerificationTokenExpiry(LocalDateTime verificationTokenExpiry) {
-        this.verificationTokenExpiry = verificationTokenExpiry;
-    }
 
 }

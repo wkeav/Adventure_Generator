@@ -32,24 +32,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         throws IOException, ServletException{
             // get Auth header
             String httpHeader = request.getHeader("Authorization");
+            
+            logger.debug("JwtAuthenticationFilter - Request URI: {}", request.getRequestURI());
+            logger.debug("JwtAuthenticationFilter - Authorization header: {}", httpHeader);
 
             if (httpHeader != null && httpHeader.startsWith("Bearer ")){
-                String token = httpHeader.substring(7); // remove "Bearer "
+                String token = httpHeader.substring(7); // Remove "Bearer "
 
                 try{
                     String username = jwtUtil.getUsernameFromToken(token);
+                    logger.debug("JwtAuthenticationFilter - Extracted username: {}", username);
                     if(jwtUtil.validateToken(token, username)){
+                        logger.debug("JwtAuthenticationFilter - Token validated successfully for user: {}", username);
                         // Represents an authenticated user 
                         UsernamePasswordAuthenticationToken authUser = 
                         new UsernamePasswordAuthenticationToken
                         (username,
-                        null, // credentials 
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")) // authorities 
+                        null, // Credentials 
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")) // Authorities 
                         );
                         SecurityContextHolder.getContext().setAuthentication(authUser); // Allow access to authenticated user
+                    } else {
+                        logger.warn("JwtAuthenticationFilter - Token validation failed for username: {}", username);
                     }
                 }catch(Exception e){
-                    logger.warn("JWT validation failed: ", e.getMessage());
+                    logger.error("JWT validation failed: {}", e.getMessage(), e);
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json");
                     response.getWriter().write("{\"error\": \"Invalid or expired token\"}");

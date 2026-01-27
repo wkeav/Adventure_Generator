@@ -55,10 +55,18 @@ export class AdventureGenerator {
         // AJAX with fetch API 
         try{
             this.startLoading();
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                alert('Please log in first!');
+                window.location.href = '/login.html';
+                return;
+            }
+            
             const response = await fetch('/api/adventures/generate',{
                 method: 'POST',
                 headers:{
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body:JSON.stringify({
                     mood: selectedMood,
