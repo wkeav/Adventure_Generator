@@ -1,5 +1,33 @@
 package Adventure_generator.Util;
 
+/**
+ * JWT Utility
+ * 
+ * Utility class for JSON Web Token (JWT) generation, validation, and parsing.
+ * Uses HS512 algorithm with 512-bit secret key for token signing.
+ * 
+ * Features:
+ * - JWT token generation with user data
+ * - Token validation (signature and expiration)
+ * - Claims extraction (username, expiration date)
+ * - Custom token expiry support
+ * 
+ * Token Configuration:
+ * - Algorithm: HS512 (HMAC with SHA-512)
+ * - Validity: 7 days (604800 seconds)
+ * - Subject: Username
+ * - Secret: Configured in application.properties
+ * 
+ * Security:
+ * - 512+ bit secret key required for HS512
+ * - Token expiration validation
+ * - Secure key generation from configured secret
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
+ */
+
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -22,7 +50,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtUtil implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60; // when its expired
+    public static final long JWT_TOKEN_VALIDITY = 7 * 24 * 60 * 60; // 7 days in seconds
 
     @Value("${jwt.secret}")
     private String secret;

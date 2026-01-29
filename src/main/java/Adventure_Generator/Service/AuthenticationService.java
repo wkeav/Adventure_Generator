@@ -1,5 +1,27 @@
 package Adventure_generator.Service;
 
+/**
+ * Authentication Service
+ * 
+ * Business logic layer for user authentication and registration.
+ * Handles user account creation, password encryption, and JWT token generation.
+ * 
+ * Features:
+ * - User registration with duplicate email checking
+ * - Password encryption using BCrypt
+ * - User login with credential validation
+ * - JWT token generation with user data
+ * 
+ * Security:
+ * - BCryptPasswordEncoder for password hashing
+ * - Email uniqueness validation
+ * - Secure token generation via JwtUtil
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
+ */
+
 import java.time.LocalDateTime;
 
 import java.util.Optional;

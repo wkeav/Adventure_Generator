@@ -1,5 +1,29 @@
 package Adventure_generator.Config;
 
+/**
+ * Security Configuration
+ * 
+ * Spring Security configuration for JWT-based authentication.
+ * Defines security filter chain, public/protected endpoints, and JWT filter integration.
+ * 
+ * Security Features:
+ * - JWT token validation filter
+ * - CSRF protection disabled (using JWT)
+ * - Role-based access control
+ * - Public endpoints for login/register
+ * - Protected endpoints for authenticated users
+ * 
+ * Public Endpoints:
+ * - /api/auth/** - Authentication endpoints
+ * - /api/weather - Weather data (requires JWT)
+ * - /login.html, /home.html - Static pages
+ * - /styles.css, /js/** - Static resources
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
+ */
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -18,8 +18,27 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-/*
- * This class check every incoming request for a JWT token, to see if it's valid or not.
+/**
+ * JWT Authentication Filter
+ * 
+ * Spring Security filter for JWT token validation on incoming HTTP requests.
+ * Extracts JWT token from Authorization header, validates it, and sets authentication context.
+ * 
+ * Filter Flow:
+ * 1. Extracts JWT token from "Authorization: Bearer {token}" header
+ * 2. Validates token signature and expiration
+ * 3. Extracts username from token claims
+ * 4. Sets UsernamePasswordAuthenticationToken in SecurityContext
+ * 5. Grants ROLE_USER authority to authenticated users
+ * 
+ * Error Handling:
+ * - Returns 401 Unauthorized for invalid/expired tokens
+ * - Logs validation failures with stack traces
+ * - Allows anonymous access if no token present
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired

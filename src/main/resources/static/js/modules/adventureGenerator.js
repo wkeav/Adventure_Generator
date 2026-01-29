@@ -1,4 +1,32 @@
-// Handle adventure generation and API calls
+/**
+ * Adventure Generator Module
+ * 
+ * Handles adventure generation based on user's mood, weather conditions, and distance preferences.
+ * Communicates with backend API to generate personalized adventure suggestions.
+ * 
+ * Features:
+ * - Generates adventures based on mood selection
+ * - Integrates with weather data for context-aware suggestions
+ * - Supports long-distance preference toggle
+ * - Displays generated adventures with loading states
+ * - Requires JWT authentication for all requests
+ * 
+ * API Endpoints:
+ * - POST /api/adventures/generate - Generate new adventure
+ * 
+ * Dependencies:
+ * - MoodHandler module for mood selection
+ * - JWT token from localStorage
+ * - Backend AdventureController and AdventureService
+ * - DOM elements: generate-btn, adventure-description, mood-text, adventure-result
+ * 
+ * @module AdventureGenerator
+ * @requires localStorage
+ * @requires MoodHandler
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ */
+
 export class AdventureGenerator {
     constructor() {
         this.initializeGenerateButton();

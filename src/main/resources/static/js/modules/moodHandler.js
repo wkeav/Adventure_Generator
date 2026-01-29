@@ -1,4 +1,30 @@
 // Handle mood selection and state
+/**
+ * Mood Handler Module
+ * 
+ * Manages user mood selection interface and state.
+ * Provides mood buttons for happy, relaxed, energetic, and romantic moods.
+ * 
+ * Features:
+ * - Interactive mood button selection
+ * - Visual feedback for selected mood
+ * - Mood state management
+ * - Integration with AdventureGenerator
+ * 
+ * Available Moods:
+ * - happy
+ * - relaxed
+ * - energetic
+ * - romantic
+ * 
+ * Dependencies:
+ * - DOM elements with data-mood attributes
+ * 
+ * @module MoodHandler
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ */
+
 export class MoodHandler {
     constructor() {
         this.selectedMood = null;

@@ -1,4 +1,32 @@
-// Handle user registers or login 
+/**
+ * User Authentication Module
+ * 
+ * Handles user registration, login, and JWT token management.
+ * Manages authentication state and redirects users between login and home pages.
+ * 
+ * Features:
+ * - User registration with password confirmation validation
+ * - User login with JWT token generation
+ * - Token and user data storage in localStorage
+ * - Form validation with real-time feedback
+ * - Loading states for async operations
+ * - Automatic redirect after successful authentication
+ * 
+ * API Endpoints:
+ * - POST /api/auth/registrations - User registration
+ * - POST /api/auth/sessions - User login
+ * 
+ * Dependencies:
+ * - Backend AuthController for authentication
+ * - localStorage for token persistence
+ * - DOM elements: login-form, register-form, message divs
+ * 
+ * @module userAuth
+ * @requires localStorage
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ */
+
 export class userAuth {
     startLoading(button) {
         if (button) {
@@ -116,12 +144,12 @@ export class userAuth {
     }
 
     loginForm(){
-            const loginForm = document.getElementById('login-form');
-            if(loginForm){
-                loginForm.onsubmit = async(e) => {
+        const loginForm = document.getElementById('login-form');
+        if(loginForm){
+            loginForm.onsubmit = async(e) => {
                 e.preventDefault();
                 const loginBtn = loginForm.querySelector('button[type="submit"]');
-                this.startLoading();
+                this.startLoading(loginBtn);
 
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
@@ -130,28 +158,13 @@ export class userAuth {
                 try{
                     const result = await this.login(email,password);
                     if(result.success){
-                        messageDiv.textContent = "Login successful!";
+                        messageDiv.textContent = "Login successful! Redirecting...";
                         messageDiv.style.color = "green";
-
-                        const iframe = document.getElementById('iframe');
-                        iframe.style.display = 'none';
-                        iframe.name = 'password-save-frame';
-                        document.body.appendChild(iframe); // add it to the HTML page 
                         
-                        // Clone form with user's data 
-                        const form = loginForm.cloneNode(true);
-                        form.target = 'password-save-frame';
-                        form.action = 'data:text/html,<script>parent.postMessage("success","*")</script>'; // Fake success
-                        form.style.display = 'none';
-                        document.body.appendChild(form);
-                        form.submit();
-
-                        
+                        // Redirect after a short delay
                         setTimeout(() => {
-                            document.body.removeChild(iframe);
-                            document.body.removeChild(form);
                             window.location.href = "/home.html"; 
-                        }, 2000);
+                        }, 1500);
                     }else{
                         messageDiv.textContent = result.message || "Invalid password or email. Please try again.";
                         messageDiv.style.color = "red";
@@ -159,9 +172,9 @@ export class userAuth {
                 }finally{
                     this.stopLoading(loginBtn);
                 }
-            }
-    };
-}
+            };
+        }
+    }
 
     RegisterValidation(){
         const passwordInput = document.getElementById('register-password');

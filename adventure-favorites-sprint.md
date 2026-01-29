@@ -23,6 +23,8 @@ Enable users to mark/unmark their own adventures as favorites, view favorites li
    - Location: `src/main/java/Adventure_Generator/Repository/AdventureRepository.java`
    - Add: `List<Adventure> findByUserIdAndIsFavoriteTrueOrderByCreatedAtDesc(Long userId);`
 
+   
+
 ### Acceptance Criteria
 - [ ] Application boots without errors
 - [x] DB shows `is_favorite` column in `adventure` table

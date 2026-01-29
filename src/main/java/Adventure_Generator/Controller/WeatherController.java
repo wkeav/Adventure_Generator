@@ -1,5 +1,25 @@
 package Adventure_generator.Controller;
 
+/**
+ * Weather Controller
+ * 
+ * REST API controller for weather data retrieval.
+ * Fetches current weather information based on user's geographic coordinates.
+ * 
+ * Endpoints:
+ * - GET /api/weather?lat={latitude}&lon={longitude} - Get current weather
+ * 
+ * Security:
+ * - Requires JWT authentication (protected endpoint)
+ * 
+ * External Dependencies:
+ * - OpenWeatherMap API via WeatherApiClient
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
+ */
+
 import org.springframework.web.bind.annotation.RestController;
 
 import Adventure_generator.DTOs.Response.WeatherResponse;

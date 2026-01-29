@@ -1,5 +1,25 @@
 package Adventure_generator.Controller;
 
+/**
+ * Authentication Controller
+ * 
+ * REST API controller for user authentication operations.
+ * Handles user registration and login with JWT token generation.
+ * 
+ * Endpoints:
+ * - POST /api/auth/registrations - User registration
+ * - POST /api/auth/sessions - User login
+ * 
+ * Security:
+ * - Publicly accessible endpoints (no JWT required for login/register)
+ * - Password validation and encryption
+ * - JWT token generation on successful authentication
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
+ */
+
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;

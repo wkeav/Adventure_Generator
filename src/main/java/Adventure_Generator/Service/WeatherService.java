@@ -1,5 +1,25 @@
 package Adventure_generator.Service;
 
+/**
+ * Weather Service
+ * 
+ * Business logic layer for weather data retrieval and validation.
+ * Validates geographic coordinates and delegates API calls to WeatherApiClient.
+ * 
+ * Features:
+ * - Geographic coordinate validation
+ * - Weather data retrieval by latitude/longitude
+ * - Integration with OpenWeatherMap API
+ * 
+ * Validation:
+ * - Latitude: -90 to 90 degrees
+ * - Longitude: -180 to 180 degrees
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
+ */
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

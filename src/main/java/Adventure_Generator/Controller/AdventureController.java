@@ -18,6 +18,26 @@ import Adventure_generator.Model.User;
 import Adventure_generator.Repository.UserRepository;
 import Adventure_generator.Service.AdventureService;
 
+/**
+ * Adventure Controller
+ * 
+ * REST API controller for adventure generation and management.
+ * Handles requests for generating personalized adventures and retrieving user's adventure history.
+ * All endpoints require JWT authentication.
+ * 
+ * Endpoints:
+ * - POST /api/adventures/generate - Generate new adventure based on mood, weather, and distance
+ * - GET /api/adventures/history - Retrieve user's adventure history
+ * 
+ * Security:
+ * - Requires valid JWT token in Authorization header
+ * - Extracts authenticated user from SecurityContext
+ * - User-specific data isolation
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
+ */
 
 @RestController
 @RequestMapping(path = "/api/adventures")

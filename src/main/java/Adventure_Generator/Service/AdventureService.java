@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +20,33 @@ import Adventure_generator.Repository.AdventureRepository;
 import jakarta.annotation.PostConstruct;
 
 /**
- * Service for generating and persisting adventure recommendations
- * Loads adventure ideas from adventures.json and filters by mood/weather
+ * Adventure Service
+ * 
+ * Business logic layer for adventure generation and management.
+ * Loads adventure ideas from JSON file and filters based on user preferences.
+ * Persists generated adventures to database with user associations.
+ * 
+ * Features:
+ * - Loads adventure data from adventures.json on application startup
+ * - Filters adventures by mood, weather conditions, and distance preference
+ * - Random selection from filtered adventure pool
+ * - Saves generated adventures with user metadata
+ * - Retrieves user's adventure history
+ * 
+ * Adventure Filtering:
+ * - Mood: happy, relaxed, energetic, romantic
+ * - Weather: clear, rain, snow, any
+ * - Distance: regular or long-distance
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
  */
 @Service
 public class AdventureService {
 
     private List<AdventureIdea> adventureIdeas;
+    private static final Logger logger = LoggerFactory.getLogger(AdventureService.class);
 
     @Autowired
     private AdventureRepository adventureRepository;
@@ -38,8 +60,10 @@ public class AdventureService {
 
         try(InputStream is = getClass().getResourceAsStream("/adventures.json")){ // Open and read inputStream 
             adventureIdeas = Arrays.asList(mapper.readValue(is, AdventureIdea[].class)); // Convert into an arraylist
+            logger.info("Successfully loaded {} adventures from adventures.json", adventureIdeas.size());
         }catch (IOException e){
             e.printStackTrace();
+            logger.error("Failed to load adventures.json: {}", e.getMessage());
             adventureIdeas = new ArrayList<>(); // Empty array list
         }
     }
@@ -53,6 +77,9 @@ public class AdventureService {
      * @return adventure suggestion text
      */
     public String generateAdventure(String mood, String weather, boolean longDistance){
+        logger.debug("generateAdventure called with mood={}, weather={}, longDistance={}", mood, weather, longDistance);
+        logger.debug("Total adventures loaded: {}", adventureIdeas.size());
+        
         List<AdventureIdea> filteredList = adventureIdeas.stream()
             .filter(a -> a.getMood().equalsIgnoreCase(mood) && (a.getWeather().equalsIgnoreCase(weather) || a.getWeather().equalsIgnoreCase("any")))
             .filter(a -> {
@@ -65,13 +92,18 @@ public class AdventureService {
             })
             .toList();
 
+        logger.debug("Filtered adventures count: {}", filteredList.size());
+        
         if(filteredList.isEmpty()){
+            logger.warn("No adventure found for mood={}, weather={}, longDistance={}", mood, weather, longDistance);
             return "No adventure found for this mood, weather, and preference!";
         }
 
         // Generate random adventure and return
         int index = (int)(Math.random() * filteredList.size());
-        return filteredList.get(index).getAdventure();
+        String selectedAdventure = filteredList.get(index).getAdventure();
+        logger.debug("Selected adventure: {}", selectedAdventure);
+        return selectedAdventure;
     }
     
     /**
