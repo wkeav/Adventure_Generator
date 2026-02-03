@@ -117,7 +117,7 @@ public class AdventureService {
      * @return the saved Adventure entity
      */
     public Adventure saveAdventure(String adventureText, User user, String mood, String weather, Boolean isLongDistance){
-        Adventure adventure = new Adventure(adventureText, user, mood, weather, isLongDistance, false);
+        Adventure adventure = new Adventure(adventureText, user, mood, weather, isLongDistance);
         return adventureRepository.save(adventure);
     }
 

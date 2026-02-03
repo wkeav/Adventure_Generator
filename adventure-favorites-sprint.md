@@ -1,171 +1,145 @@
 # Adventure Favorites — Agile Sprint Plan
 
 ## 🎯 Feature Goal
-Enable users to mark/unmark their own adventures as favorites, view favorites list, and persist state in DB.
+Enable users to mark/unmark their own adventures as favorites using a join-table model, view favorites list, and persist state in DB.
 
 ---
 
-## 📋 Sprint Slice 1 — Data Model & Repository
-**Goal**: Add persistence layer for favorites
+## 📋 Sprint Slice 1 — Persistence Layer (Join Table)
+**Goal**: Model favorites as a relationship entity, not a boolean field.
 
 ### Tasks
-1. **Add `isFavorite` field to `Adventure` entity** DONE
-   - Location: `src/main/java/Adventure_Generator/Model/Adventure.java`
-   - Add field: `@Column(name="is_favorite") private Boolean isFavorite = false;`
-   - Add getter/setter: `getIsFavorite()`, `setIsFavorite(Boolean isFavorite)`
-   - Update constructor to include parameter (optional, default false)
+1. **Create `UserFavorite` entity**
+   - Location: `src/main/java/Adventure_Generator/Model/UserFavorite.java`
+   - Fields: `Long id`, `User user`, `Adventure adventure`, `LocalDateTime createdAt`
+   - Relationships:
+     - `@ManyToOne(fetch = FetchType.LAZY)` for both `user` and `adventure`
+   - Add `@PrePersist` to set `createdAt`
 
-2. **Update DB schema**
-   - For dev: JPA `ddl-auto=update` will auto-create column on next boot
-   - For prod: manual migration `ALTER TABLE adventure ADD COLUMN is_favorite boolean DEFAULT false;`
+2. **Add DB constraints/indexes (via JPA or migration)**
+   - Unique constraint on `(user_id, adventure_id)`
+   - Index on `user_id`
+   - Index on `adventure_id`
 
-3. **Add repository method**
-   - Location: `src/main/java/Adventure_Generator/Repository/AdventureRepository.java`
-   - Add: `List<Adventure> findByUserIdAndIsFavoriteTrueOrderByCreatedAtDesc(Long userId);`
-
-   
+3. **Create `UserFavoriteRepository`**
+   - Location: `src/main/java/Adventure_Generator/Repository/UserFavoriteRepository.java`
+   - Methods:
+     - `Optional<UserFavorite> findByUserAndAdventure(User user, Adventure adventure);`
+     - `List<UserFavorite> findAllByUserId(Long userId);`
+     - `void deleteByUserAndAdventure(User user, Adventure adventure);`
 
 ### Acceptance Criteria
-- [ ] Application boots without errors
-- [x] DB shows `is_favorite` column in `adventure` table
-- [ ] Repository method compiles (no red squiggles)
+- [ ] `UserFavorite` entity compiles
+- [ ] Unique constraint prevents duplicate favorites
+- [ ] Repository methods compile
 
 ### Hints
-- Boolean fields should use `Boolean` (nullable) not `boolean` primitive
-- JPA derives query from method name: `findBy[Field]And[Field][Condition]OrderBy[Field][Direction]`
-- Default `false` ensures existing adventures aren't favorites
+- Use `@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id","adventure_id"}))`
+- Use `@Index` for `user_id` and `adventure_id` for fast lookups
 
 ---
 
-## �� Sprint Slice 2 — Service Logic
-**Goal**: Business logic for toggling and fetching favorites
+## 📋 Sprint Slice 2 — Service Logic (Favorites Service)
+**Goal**: Add business logic for creating/removing favorites and retrieving favorited adventures.
 
 ### Tasks
-1. **Add `toggleFavorite` method to `AdventureService`**
-   - Signature: `public Adventure toggleFavorite(Long adventureId, Long userId, boolean isFavorite)`
-   - Steps:
-     1. Fetch adventure by `adventureId` using `adventureRepository.findById()`
-     2. Throw exception if not found or `adventure.getUser().getId() != userId`
-     3. Set `adventure.setIsFavorite(isFavorite)`
-     4. Save and return updated adventure
-   - Make it idempotent: if already in desired state, just return without save
+1. **Create `FavoriteService`**
+   - Location: `src/main/java/Adventure_Generator/Service/FavoriteService.java`
+   - Methods:
+     - `addFavorite(Long userId, Long adventureId)` (idempotent)
+     - `removeFavorite(Long userId, Long adventureId)`
+     - `isFavorited(Long userId, Long adventureId)`
+   - Use `@Transactional` on write methods
 
-2. **Add `getFavoriteAdventures` method**
-   - Signature: `public List<Adventure> getFavoriteAdventures(Long userId)`
-   - Delegate to repository: `return adventureRepository.findByUserIdAndIsFavoriteTrueOrderByCreatedAtDesc(userId);`
+2. **Resolve entities safely**
+   - Load `User` and `Adventure` with repositories
+   - Throw `NotFoundException` if either not found
 
-3. **Create custom exception (optional)**
-   - Create `NotFoundException` in `Adventure_Generator.Exception` package
-   - Extends `RuntimeException`, used for 404 responses
+3. **Idempotency**
+   - Before creating, check `findByUserAndAdventure`
+   - If already exists, return without duplicate write
 
 ### Acceptance Criteria
-- [ ] `toggleFavorite` changes flag and saves
-- [ ] `toggleFavorite` throws exception if wrong user
-- [ ] `toggleFavorite` is idempotent (calling twice with same value works)
-- [ ] `getFavoriteAdventures` returns only favorites for user
+- [ ] `addFavorite` is idempotent
+- [ ] `removeFavorite` deletes relationship
+- [ ] `isFavorited` returns correct boolean
 
 ### Hints
 ```java
-// Ownership check pattern
-if (!adventure.getUser().getId().equals(userId)) {
-    throw new NotFoundException("Adventure not found");
-}
-
-// Idempotency check
-if (Boolean.TRUE.equals(adventure.getIsFavorite()) == isFavorite) {
-    return adventure; // already in desired state
+@Transactional
+public void addFavorite(Long userId, Long adventureId) {
+    // find user + adventure
+    // if exists -> return
+    // else save new UserFavorite
 }
 ```
 
 ---
 
-## 📋 Sprint Slice 3 — API Endpoints
-**Goal**: Expose REST endpoints for favorites
+## 📋 Sprint Slice 3 — API Endpoints (Favorites)
+**Goal**: Expose REST endpoints for favorites and define the API contract.
 
 ### Tasks
-1. **Add `POST /api/adventures/{id}/favorite` endpoint**
-   - Location: `AdventureController.java`
-   - Extract `id` from path with `@PathVariable Long id`
-   - Get current user from `SecurityContextHolder.getContext().getAuthentication().getPrincipal()`
-   - Call `adventureService.toggleFavorite(id, currentUser.getId(), true)`
-   - Return `ResponseEntity.ok(updatedAdventure)`
-   - Handle exceptions: catch `NotFoundException` → return 404
+1. **Add `POST /api/favorites/{adventureId}` endpoint**
+   - Location: `FavoriteController.java`
+   - Extract `adventureId` with `@PathVariable`
+   - Get current user from `SecurityContextHolder`
+   - Call `favoriteService.addFavorite(currentUser.getId(), adventureId)`
+   - Return 201 or 200
 
-2. **Add `DELETE /api/adventures/{id}/favorite` endpoint**
-   - Similar to POST but call `toggleFavorite(..., false)`
-   - Return 200 on success
+2. **Add `DELETE /api/favorites/{adventureId}` endpoint**
+   - Call `favoriteService.removeFavorite(...)`
+   - Return 200 or 204
 
-3. **Add `GET /api/adventures/favorites` endpoint**
-   - Call `adventureService.getFavoriteAdventures(currentUser.getId())`
-   - Return `ResponseEntity.ok(favoritesList)`
+3. **Add `GET /api/favorites` endpoint**
+   - Return list of favorited adventures for current user
+   - Uses DTO (see Slice 4)
+
+4. **Swagger/OpenAPI annotations**
+   - Add `@Operation` and `@ApiResponse` to endpoints
 
 ### Acceptance Criteria
-- [ ] POST marks adventure as favorite (200 response)
-- [ ] DELETE unmarks favorite (200 response)
-- [ ] GET returns filtered list of favorites only
-- [ ] All endpoints return 404 for non-existent/unauthorized adventures
+- [ ] POST creates favorite
+- [ ] DELETE removes favorite
+- [ ] GET returns only current user's favorites
 - [ ] Endpoints require JWT authentication
-
-### Hints
-```java
-@PostMapping("/{id}/favorite")
-public ResponseEntity<?> markFavorite(@PathVariable Long id) {
-    try {
-        User currentUser = (User) SecurityContextHolder.getContext()
-            .getAuthentication().getPrincipal();
-        Adventure updated = adventureService.toggleFavorite(id, currentUser.getId(), true);
-        return ResponseEntity.ok(updated);
-    } catch (NotFoundException e) {
-        return ResponseEntity.notFound().build();
-    }
-}
-```
 
 ---
 
 ## 📋 Sprint Slice 4 — DTO/Response Alignment
-**Goal**: Ensure `isFavorite` appears in all responses
+**Goal**: Expose favorite status without polluting core entities.
 
 ### Tasks
-1. **Verify entity serialization includes `isFavorite`**
-   - Test `GET /api/adventures/history` — should now show `isFavorite: false` for existing adventures
-   - Test `POST /api/adventures/generate` — new adventures should show `isFavorite: false`
-
-2. **Update `AdventureResponse` DTO (if used)**
+1. **Add `favorited` flag to `AdventureResponse` DTO**
    - Location: `src/main/java/Adventure_Generator/DTOs/Response/AdventureResponse.java`
-   - Add field: `private Boolean isFavorite;`
-   - Add to constructor and getter
+   - Field: `private boolean favorited;`
+
+2. **Map DTO in service layer**
+   - When returning adventures, set `favorited` by checking `UserFavorite`
+   - Avoid adding user-specific fields to `Adventure` entity
 
 ### Acceptance Criteria
-- [ ] All endpoints returning `Adventure` entities include `isFavorite` field in JSON
-- [ ] Field defaults to `false` for new/existing adventures
-
-### Hints
-- Jackson auto-serializes entity fields to JSON
-- If DTO is used, map `adventure.getIsFavorite()` to DTO field
+- [ ] API responses include `favorited` flag
+- [ ] `Adventure` entity remains user-agnostic
 
 ---
 
 ## 📋 Sprint Slice 5 — Automated Tests
-**Goal**: Ensure feature works and doesn't break existing flows
+**Goal**: Ensure join-table favorites work and regressions are avoided
 
 ### Tasks
-1. **Repository test (`AdventureRepositoryTest.java`)**
-   - Test `findByUserIdAndIsFavoriteTrueOrderByCreatedAtDesc` filters correctly
-   - Setup: save adventures with mixed `isFavorite` values for 2 users
-   - Assert: query returns only user1's favorites, ordered newest first
+1. **Repository test (`UserFavoriteRepositoryTest.java`)**
+   - Test `findByUserAndAdventure` and `findAllByUserId`
+   - Setup: create favorites for multiple users
 
-2. **Service test (`AdventureServiceTest.java`)**
-   - Test `toggleFavorite` sets flag and saves
-   - Test ownership enforcement (throws exception for wrong user)
-   - Test idempotency (calling twice doesn't fail)
-   - Test `getFavoriteAdventures` returns filtered list
+2. **Service test (`FavoriteServiceTest.java`)**
+   - Test `addFavorite` idempotency
+   - Test `removeFavorite` deletes
+   - Test `isFavorited` works
 
-3. **Controller test (`AdventureControllerTest.java`)**
-   - Test POST `/api/adventures/{id}/favorite` returns 200 with updated JSON
-   - Test DELETE returns 200
-   - Test POST with other user's adventure returns 404
-   - Test GET `/favorites` returns correct filtered list
+3. **Controller test (`FavoriteControllerTest.java`)**
+   - Test POST/DELETE/GET endpoints
+   - Test 404 on missing adventure
    - Use `@WithMockUser` or mock JWT principal
 
 ### Acceptance Criteria
@@ -175,26 +149,16 @@ public ResponseEntity<?> markFavorite(@PathVariable Long id) {
 
 ### Hints
 ```java
-// Service test setup
 @Test
-void toggleFavorite_marksAsFavorite() {
-    User user = new User(1L, "test@test.com", "testuser", "pass", LocalDateTime.now());
-    Adventure adv = new Adventure("hike", user, "happy", "sunny", false);
-    adv.setId(1L);
-    when(adventureRepository.findById(1L)).thenReturn(Optional.of(adv));
-    when(adventureRepository.save(any())).thenReturn(adv);
-    
-    Adventure result = adventureService.toggleFavorite(1L, 1L, true);
-    
-    assertTrue(result.getIsFavorite());
-    verify(adventureRepository).save(adv);
+void addFavorite_isIdempotent() {
+   // when exists, service should not create a duplicate
 }
 ```
 
 ---
 
 ## 📋 Sprint Slice 6 (Optional) — Frontend Integration
-**Goal**: Add UI for favoriting adventures
+**Goal**: Add UI for favoriting adventures with join-table API
 
 ### Tasks
 1. **Update adventure history UI**
@@ -203,13 +167,13 @@ void toggleFavorite_marksAsFavorite() {
    - Show filled star if `isFavorite === true`, outline if false
 
 2. **Wire toggle handler**
-   - On click, call `POST /api/adventures/{id}/favorite` or `DELETE` based on current state
+   - On click, call `POST /api/favorites/{id}` or `DELETE` based on current state
    - Update local state optimistically, rollback on error
    - Include JWT token in `Authorization: Bearer <token>` header
 
 3. **Add Favorites view**
    - New button/tab to show only favorites
-   - Fetch from `GET /api/adventures/favorites`
+   - Fetch from `GET /api/favorites`
    - Display same format as history
 
 ### Acceptance Criteria

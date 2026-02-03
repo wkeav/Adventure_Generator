@@ -1,7 +1,8 @@
-package Adventure_generator.Model;
+package Adventure_generator.Entity;
 
 import java.time.LocalDateTime;
 
+import Adventure_generator.Entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,13 +16,25 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
-import Adventure_generator.Model.User;
-
-/*
- * Adventure Entity - Represents a generated adventure for a user, can be modified (favourite, notes, etc)
+/**
+ * Adventure Entity
  * 
- * Database Table: adventure
- * Relationships: Many adventures belong to one user
+ * Represents a generated adventure recommendation for a user.
+ * Stores adventure details, user preferences, and metadata like favorite status.
+ * 
+ * Database Mapping:
+ * - Table: adventure
+ * - Relationships: Many adventures belong to one user (ManyToOne)
+ * 
+ * Features:
+ * - Automatic timestamp management (createdAt, updatedAt)
+ * - Lazy loading of user relationship
+ * - Favorite marking capability
+ * - Long-distance preference tracking
+ * 
+ * @author Astra K. Nguyen
+ * @version 1.0.0
+ * @since 2026-01-28
  */
 @Entity
 @Table(name = "adventure")
@@ -55,19 +68,16 @@ public class Adventure {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name="is_favourite")
-    private Boolean isFavourite = false;
 
     // CONSTRUCTOR
     public Adventure(){}
 
-    public Adventure(String adventure, User user, String mood, String weather, Boolean isLongDistance, Boolean isFavourite) {
+    public Adventure(String adventure, User user, String mood, String weather, Boolean isLongDistance) {
         this.adventure = adventure;
         this.user = user;
         this.mood = mood;
         this.weather = weather;
         this.isLongDistance = isLongDistance != null ? isLongDistance : false;
-        this.isFavourite = false;
     }
 
     // JPA CALLBACKS
@@ -88,7 +98,7 @@ public class Adventure {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // GETTER & SETTER
+    // Getter & Setter 
     public Long getId() {
         return id;
     }
@@ -152,13 +162,6 @@ public class Adventure {
         this.updatedAt = updatedAt;
     }
 
-    public Boolean getIsFavourite() {
-        return isFavourite;
-    }
-
-    public void setIsFavourite(Boolean isFavourite){
-        this.isFavourite = isFavourite != null ? isFavourite : false;
-    }
 
     // OBJECT METHODS
     @Override
