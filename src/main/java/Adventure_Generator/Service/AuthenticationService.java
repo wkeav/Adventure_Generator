@@ -30,7 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import Adventure_generator.Model.User;
+import Adventure_generator.Entity.User;
 import Adventure_generator.Repository.UserRepository;
 /*
  * Handles all authentication related business logic - User registration and user login

@@ -23,8 +23,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import Adventure_generator.Controller.AdventureController;
 import Adventure_generator.DTOs.Requests.AdventureRequest;
 import Adventure_generator.DTOs.Response.AdventureResponse;
-import Adventure_generator.Model.Adventure;
-import Adventure_generator.Model.User;
+import Adventure_generator.Entity.Adventure;
+import Adventure_generator.Entity.User;
 import Adventure_generator.Service.AdventureService;
 
 @ExtendWith(MockitoExtension.class)

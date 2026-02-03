@@ -35,7 +35,7 @@ import Adventure_generator.DTOs.Requests.LoginRequest;
 import Adventure_generator.DTOs.Requests.RegisterRequest;
 import Adventure_generator.DTOs.Response.AuthResponse;
 import Adventure_generator.DTOs.Response.UserData;
-import Adventure_generator.Model.User;
+import Adventure_generator.Entity.User;
 import Adventure_generator.Service.AuthenticationService;
 import Adventure_generator.Util.JwtUtil;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -17,8 +17,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import Adventure_generator.Model.Adventure;
-import Adventure_generator.Model.User;
+import Adventure_generator.Entity.Adventure;
+import Adventure_generator.Entity.User;
 import Adventure_generator.Repository.AdventureRepository;
 import Adventure_generator.Service.AdventureService;
 

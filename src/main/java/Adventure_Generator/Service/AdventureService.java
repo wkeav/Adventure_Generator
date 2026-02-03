@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import Adventure_generator.Model.Adventure;
-import Adventure_generator.Model.User;
+import Adventure_generator.Entity.Adventure;
+import Adventure_generator.Entity.User;
 import Adventure_generator.POJO.AdventureIdea;
 import Adventure_generator.Repository.AdventureRepository;
 import jakarta.annotation.PostConstruct;

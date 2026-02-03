@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Adventure_generator.DTOs.Requests.AdventureRequest;
 import Adventure_generator.DTOs.Response.AdventureResponse;
-import Adventure_generator.Model.Adventure;
-import Adventure_generator.Model.User;
+import Adventure_generator.Entity.Adventure;
+import Adventure_generator.Entity.User;
 import Adventure_generator.Repository.UserRepository;
 import Adventure_generator.Service.AdventureService;
 
