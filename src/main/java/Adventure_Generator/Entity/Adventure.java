@@ -2,7 +2,6 @@ package Adventure_generator.Entity;
 
 import java.time.LocalDateTime;
 
-import Adventure_generator.Entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,24 +16,33 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 /**
- * Adventure Entity
+ * Adventure Entity - Generated adventure recommendations for users
  * 
- * Represents a generated adventure recommendation for a user.
- * Stores adventure details, user preferences, and metadata like favorite status.
+ * Represents a generated adventure recommendation for a user based on mood, weather,
+ * and distance preferences. Each adventure record is immutable after creation and
+ * tracks when it was created and last modified.
  * 
  * Database Mapping:
  * - Table: adventure
- * - Relationships: Many adventures belong to one user (ManyToOne)
+ * - Primary Key: id (auto-generated)
+ * - Foreign Key: user_id (non-nullable) - Links to the user who generated this adventure
+ * 
+ * Relationships:
+ * - User: Many adventures belong to one user (ManyToOne with LAZY fetch)
+ * - UserFavourite: One-to-many relationship via join table for favorites tracking
  * 
  * Features:
- * - Automatic timestamp management (createdAt, updatedAt)
- * - Lazy loading of user relationship
- * - Favorite marking capability
- * - Long-distance preference tracking
+ * - Automatic timestamp management (createdAt immutable, updatedAt on changes)
+ * - Lazy loading of user relationship for performance optimization
+ * - Adventure preference tracking (mood, weather, distance)
+ * - Equals and hashCode based on persisted ID for Set/Map usage
  * 
- * @author Astra K. Nguyen
- * @version 1.0.0
- * @since 2026-01-28
+ * Lifecycle:
+ * - createdAt: Set once on initial persistence, never updated
+ * - updatedAt: Updated on entity modification via @PreUpdate
+ * 
+ * @see User
+ * @see UserFavourite
  */
 @Entity
 @Table(name = "adventure")
@@ -47,6 +55,7 @@ public class Adventure {
     @Column(columnDefinition="TEXT", nullable=false)
     private String adventure;
     
+    /** Foreign key reference to User entity. LAZY loaded to optimize performance. Non-nullable. */
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false)
     private User user; 
@@ -72,6 +81,15 @@ public class Adventure {
     // CONSTRUCTOR
     public Adventure(){}
 
+    /**
+     * Constructor to create an adventure with all required fields.
+     * 
+     * @param adventure The adventure description/recommendation text (non-null)
+     * @param user The user who generated/owns this adventure (non-null)
+     * @param mood The mood preference that generated this adventure (non-null)
+     * @param weather The weather condition preference (non-null)
+     * @param isLongDistance Whether this adventure involves long-distance travel (null-safe, defaults to false)
+     */
     public Adventure(String adventure, User user, String mood, String weather, Boolean isLongDistance) {
         this.adventure = adventure;
         this.user = user;
@@ -80,9 +98,13 @@ public class Adventure {
         this.isLongDistance = isLongDistance != null ? isLongDistance : false;
     }
 
-    // JPA CALLBACKS
+    // JPA Lifecycle Callbacks
     /**
-     * Called automatically by JPA before the entity is persisted to the database
+     * JPA lifecycle callback invoked automatically before the entity is persisted to the database.
+     * Initializes both createdAt and updatedAt timestamps to the current time.
+     * 
+     * This ensures every adventure record has accurate creation and initial update timestamps
+     * without requiring explicit setter calls from the application layer.
      */
     @PrePersist
     protected void onCreate(){
@@ -91,14 +113,17 @@ public class Adventure {
     }
 
     /**
-     * Called automatically by JPA 
+     * JPA lifecycle callback invoked automatically before the entity is updated in the database.
+     * Updates the updatedAt timestamp to the current time.
+     * 
+     * This maintains an accurate record of when the adventure was last modified.
      */
     @PreUpdate
     protected void onUpdate(){
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getter & Setter 
+    // Getters & Setters
     public Long getId() {
         return id;
     }
@@ -138,10 +163,15 @@ public class Adventure {
     public void setWeather(String weather) {
         this.weather = weather;
     }
+
     public Boolean getIsLongDistance() {
         return isLongDistance;
     }
 
+    /**
+     * Sets the long-distance preference with null-safe default behavior.
+     * @param isLongDistance True for long-distance, false otherwise, null treated as false
+     */
     public void setIsLongDistance(Boolean isLongDistance) {
         this.isLongDistance = isLongDistance != null ? isLongDistance : false;
     }
@@ -163,7 +193,12 @@ public class Adventure {
     }
 
 
-    // OBJECT METHODS
+    // Object Methods
+    /**
+     * String representation of this Adventure for logging and debugging purposes.
+     * 
+     * @return A formatted string containing all adventure fields
+     */
     @Override
     public String toString() {
         return "Adventure{" +
@@ -177,6 +212,18 @@ public class Adventure {
                 '}';
     }
 
+    /**
+     * Compares this adventure with another object for equality.
+     * 
+     * For persisted entities (with non-null IDs), equality is based on ID only.
+     * For unpersisted entities (IDs are null), equality compares all fields:
+     * adventure, mood, weather, and isLongDistance.
+     * 
+     * This approach supports both new and persisted entities in collections and lookups.
+     * 
+     * @param o The object to compare with
+     * @return true if the adventures are equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -196,6 +243,17 @@ public class Adventure {
         return isLongDistance.equals(adventure1.isLongDistance);
     }
 
+    /**
+     * Generates a hash code for this adventure.
+     * 
+     * For persisted entities (non-null ID), uses the ID hash.
+     * For unpersisted entities, combines hashes of all fields:
+     * adventure, mood, weather, and isLongDistance.
+     * 
+     * Consistent with equals() contract to support proper Set and Map behavior.
+     * 
+     * @return The hash code for this adventure
+     */
     @Override
     public int hashCode() {
         // Use ID if available, otherwise use fields

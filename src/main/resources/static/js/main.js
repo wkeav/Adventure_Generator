@@ -24,9 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
         adventureGenerator.setMood(moodHandler);
     }
 
-    
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
         const weather = new getWeather();
         weather.getLocation();
+    }
 
     // Always initialize userAuth 
     const auth = new userAuth();
@@ -51,8 +53,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         console.log('userName:', userName);
         userProfileDiv.innerHTML = userName
-            ? `<span class="material-symbols-outlined" style="color: black;">account_circle</span><span class="font-semibold" style="color: black;">${userName}</span>`
-            : '<span style="color: black;">Not logged in</span>';
+            ? `<span class="material-symbols-outlined" style="color: black; font-size: 18px;">account_circle</span><span class="text-sm" style="color: black;">${userName}</span>`
+            : '<span style="color: black; font-size: 14px;">Not logged in</span>';
+
+        // Redirect to profile page when clicking user profile
+        if (userProfileDiv && userName) {
+            userProfileDiv.style.cursor = 'pointer';
+            userProfileDiv.addEventListener('click', () => {
+                window.location.href = '/profile.html';
+            });
+        }
     }
 
     // Long distance preference

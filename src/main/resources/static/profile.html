@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - Cozy Adventure Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fdba74 100%);
+            min-height: 100vh;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .slide-in {
+            animation: slideIn 0.4s ease-out forwards;
+        }
+        .section-card {
+            animation: fadeIn 0.6s ease-out forwards;
+            animation-delay: calc(var(--delay) * 0.08s);
+            opacity: 0;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f59e0b, #ea580c);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .section-card:hover::before {
+            opacity: 1;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .toast.success { 
+            border-left: 4px solid #10b981;
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.2);
+        }
+        .toast.error { 
+            border-left: 4px solid #ef4444;
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.2);
+        }
+        .toast.info { 
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 20px 60px rgba(245, 158, 11, 0.2);
+        }
+        
+        .unsaved-indicator {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150px);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 100;
+        }
+        .unsaved-indicator.show {
+            transform: translateX(-50%) translateY(0);
+            animation: slideUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+        
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+        .avatar-upload {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+            border: 6px solid white;
+        }
+        .avatar-upload:hover {
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+        }
+        .avatar-upload::after {
+            content: 'Change Photo';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .avatar-upload:hover::after {
+            opacity: 1;
+        }
+        
+        .modern-input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid #fbbf24;
+            background: #fffbeb;
+        }
+        .modern-input:focus {
+            transform: translateY(-2px);
+            border-color: #f59e0b;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.15);
+            background: white;
+        }
+        .modern-input:hover:not(:focus) {
+            border-color: #f59e0b;
+        }
+        
+        .char-counter {
+            font-size: 11px;
+            font-weight: 500;
+            color: #9ca3af;
+            text-align: right;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+        }
+        .char-counter.warning {
+            color: #f59e0b;
+        }
+        .char-counter.error {
+            color: #ef4444;
+        }
+        
+        .backdrop-blur {
+            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        .gradient-button {
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .gradient-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .gradient-button:hover::before {
+            left: 100%;
+        }
+        .gradient-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.4);
+        }
+        .gradient-button:active {
+            transform: translateY(-1px);
+        }
+        
+        .icon-badge {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #fef3c7;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: #fef3c7;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #ea580c);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .avatar-upload {
+                width: 120px;
+                height: 120px;
+            }
+            .section-card {
+                border-radius: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="webcrumbs"> 
+    <div class="w-full max-w-[1400px] mx-auto p-4 sm:p-6 md:p-10 min-h-screen">
+        <header class="mb-12 fade-in">
+            <div class="glass-card rounded-3xl shadow-2xl p-6 sm:p-8">
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <a href="/home.html" class="flex items-center gap-3 text-amber-900 hover:text-amber-600 transition-all hover:-translate-x-2 bg-amber-50 px-6 py-3 rounded-full hover:bg-amber-100">
+                        <span class="material-symbols-outlined" style="font-size: 24px;">arrow_back</span>
+                        <span class="font-semibold">Back</span>
+                    </a>
+                    <div class="text-center flex-1">
+                        <h1 class="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-amber-700 to-orange-600 bg-clip-text text-transparent mb-2">My Profile</h1>
+                        <p class="text-amber-700 font-medium">Manage your account settings and preferences</p>
+                    </div>
+                    <div class="w-[140px] hidden sm:block"></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column: Profile Picture -->
+                <div class="lg:col-span-1">
+                    <div class="section-card shadow-xl p-8 sticky top-8" style="--delay: 1;">
+                        <div class="section-header">
+                            <div class="icon-badge">
+                                <span class="material-symbols-outlined text-amber-700" style="font-size: 28px;">account_circle</span>
+                            </div>
+                            <h2 class="text-xl font-bold text-amber-900">Avatar</h2>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="avatar-container mb-6">
+                                <div id="profile-pic-preview" class="avatar-upload bg-gradient-to-br from-amber-300 via-orange-300 to-amber-400 flex items-center justify-center">
+                                    <span id="avatar-initials" class="text-white font-bold text-5xl"></span>
+                                </div>
+                                <label for="profile-pic-upload" class="absolute -bottom-2 -right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full p-4 cursor-pointer hover:from-amber-600 hover:to-orange-600 transition-all shadow-2xl hover:scale-110">
+                                    <span class="material-symbols-outlined" style="font-size: 24px;">photo_camera</span>
+                                    <input type="file" id="profile-pic-upload" accept="image/*" class="hidden">
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-amber-800 mb-2 font-semibold text-lg">Profile Photo</p>
+                                <p class="text-xs text-amber-600 mb-4">Max 2MB • JPG, PNG, GIF</p>
+                                <button id="remove-pic-btn" class="text-sm text-red-600 hover:text-red-700 transition-all hover:underline font-medium flex items-center gap-1 mx-auto">
+                                    <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                                    Remove Photo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Forms -->
+                <div class="lg:col-span-2 space-y-8">
+
+                    <!-- Account Information -->
+                    <div class="section-card shadow-xl p-8 hover-lift" style="--delay: 2;">
+                        <div class="section-header">
+                            <div class="icon-badge">
+                                <span class="material-symbols-outlined text-amber-700" style="font-size: 28px;">person</span>
+                            </div>
+                            <h2 class="text-xl font-bold text-amber-900">Account Information</h2>
+                        </div>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-bold text-amber-900 mb-3 flex items-center gap-2">
+                                    <span class="material-symbols-outlined" style="font-size: 18px;">badge</span>
+                                    Username
+                                </label>
+                                <input type="text" id="edit-username" maxlength="30" class="modern-input w-full px-5 py-4 rounded-xl focus:outline-none font-medium text-amber-900" placeholder="Enter your username">
+                                <div id="username-counter" class="char-counter">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">edit</span>
+                                    <span>0/30 characters</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div id="username-progress" class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-amber-900 mb-3 flex items-center gap-2">
+                                    <span class="material-symbols-outlined" style="font-size: 18px;">mail</span>
+                                    Email Address
+                                </label>
+                                <div class="relative">
+                                    <input type="email" id="edit-email" class="w-full px-5 py-4 border-2 border-amber-200 rounded-xl bg-amber-50/50 cursor-not-allowed font-medium text-amber-700" placeholder="Enter email" readonly disabled>
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-amber-600">
+                                        <span class="material-symbols-outlined" style="font-size: 20px;">lock</span>
+                                    </span>
+                                </div>
+                                <p class="text-xs text-amber-600 mt-2 flex items-center gap-1 font-medium">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">info</span>
+                                    Your email is permanent and cannot be changed
+                                </p>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-amber-900 mb-3 flex items-center gap-2">
+                                    <span class="material-symbols-outlined" style="font-size: 18px;">description</span>
+                                    Bio
+            <!-- Unsaved Changes Indicator -->
+            <div id="unsaved-indicator" class="unsaved-indicator">
+                <div class="glass-card rounded-3xl shadow-2xl px-8 py-4 flex items-center gap-6 border-2 border-amber-300">
+                    <span class="text-amber-700 font-bold flex items-center gap-3 text-lg">
+                        <span class="material-symbols-outlined loading-spinner" style="font-size: 28px;">pending</span>
+                        You have unsaved changes
+                    </span>
+                    <div class="flex gap-3">
+                        <button id="save-from-indicator" class="gradient-button text-white font-bold px-8 py-3 rounded-full shadow-lg flex items-center gap-2">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            Save Now
+                        </button>
+                        <button id="discard-changes" class="bg-white text-amber-900 font-bold px-8 py-3 rounded-full hover:bg-amber-50 transition-all border-2 border-amber-200 flex items-center gap-2">
+                            <span class="material-symbols-outlined">close</span>
+                            Discard
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8" style="--delay: 4;">
+                <div class="lg:col-span-2 flex gap-4">
+                    <button id="save-profile-btn" class="flex-1 gradient-button text-white font-bold py-5 rounded-2xl shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg">
+                        <span id="save-icon" class="material-symbols-outlined" style="font-size: 28px;">save</span>
+                        <span id="save-text">Save All Changes</span>
+                    </button>
+                    <button id="cancel-btn" class="px-10 bg-white text-amber-900 font-bold py-5 rounded-2xl border-3 border-amber-300 hover:bg-amber-50 transition-all hover:-translate-y-1 shadow-md">
+                        Cancel
+                    </button>
+                </div>
+                
+                <!-- Danger Zone -->
+                <div class="section-card shadow-xl p-6 border-2 border-red-300 bg-gradient-to-br from-red-50 to-orange-50" style="--delay: 5;">
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="material-symbols-outlined text-red-600" style="font-size: 24px;">warning</span>
+                            <h3 class="font-bold text-red-700">Account Actions</h3>
+                        </div>
+                        <button id="logout-btn" class="flex items-center justify-center gap-2 px-6 py-3 text-red-600 border-2 border-red-400 rounded-xl hover:bg-red-100 transition-all font-bold hover:-translate-y-1 bg-white shadow-md">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">logout</span>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>  <div class="flex gap-2">
+                        <button id="save-from-indicator" class="bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold px-6 py-2 rounded-full hover:from-amber-600 hover:to-orange-600 transition-all hover:shadow-lg">
+                            Save
+                        </button>
+                        <button id="discard-changes" class="bg-gray-200 text-gray-700 font-semibold px-6 py-2 rounded-full hover:bg-gray-300 transition-all">
+                            Discard
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="section-card flex gap-4" style="--delay: 4;">
+                <button id="save-profile-btn" class="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold py-4 rounded-lg hover:from-amber-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                    <span id="save-icon" class="material-symbols-outlined">save</span>
+                    <span id="save-text">Save Changes</span>
+                </button>
+                <button id="cancel-btn" class="px-8 bg-white text-amber-800 font-semibold py-4 rounded-lg border-2 border-amber-300 hover:bg-amber-50 transition-all hover:-translate-y-1">
+                    Cancel
+                </button>
+            </div>
+
+            <!-- Divider -->
+            <div class="w-full h-[1px] bg-amber-200 my-8"></div>
+
+            <!-- Danger Zone -->
+            <div class="section-card bg-white rounded-xl shadow-md p-8 border-2 border-red-200 hover-lift" style="--delay: 5;">
+                <h2 class="text-2xl font-bold text-red-600 mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined">warning</span>
+                    Danger Zone
+                </h2>
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <div>
+                        <p class="font-semibold text-gray-800">Logout</p>
+                        <p class="text-sm text-gray-600">Sign out of your account</p>
+                    </div>
+                    <button id="logout-btn" class="flex items-center gap-2 px-6 py-3 text-red-600 border-2 border-red-300 rounded-lg hover:bg-red-50 transition-all font-semibold hover:-translate-y-1">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">logout</span>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center">
+    <div class="backdrop-blur fixed inset-0" id="modal-backdrop"></div>
+<!-- Confirmation Modal -->
+<div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="backdrop-blur fixed inset-0" id="modal-backdrop"></div>
+    <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-lg mx-4 relative z-10 fade-in border-2 border-amber-200">
+        <div class="flex flex-col items-center text-center mb-8">
+            <div class="bg-gradient-to-br from-red-100 to-orange-100 rounded-full p-6 mb-6 shadow-lg">
+                <span class="material-symbols-outlined text-red-600" style="font-size: 48px;">logout</span>
+            </div>
+            <h3 class="text-3xl font-bold text-gray-900 mb-3">Confirm Logout</h3>
+            <p class="text-gray-600 text-lg leading-relaxed">Are you sure you want to sign out? <br/>Any unsaved changes will be lost.</p>
+        </div>
+        <div class="flex gap-4">
+            <button id="cancel-logout" class="flex-1 px-8 py-4 bg-amber-100 text-amber-900 rounded-xl hover:bg-amber-200 transition-all font-bold text-lg">
+                Stay Logged In
+            </button>
+            <button id="confirm-logout" class="flex-1 px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all font-bold text-lg shadow-lg">
+                Yes, Logout
+            </button>
+        </div>
+    </div>
+</div>t hasUnsavedChanges = false;
+    let originalData = {};
+
+    // Show toast notification
+    function showToast(message, type = 'info') {
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) existingToast.remove();
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icon = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info';
+        toast.innerHTML = `
+            <span class="material-symbols-outlined" style="color: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#f59e0b'};">${icon}</span>
+            <span class="font-semibold">${message}</span>
+        `;
+        
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Update character counter
+    function updateCounter(input, counterId, maxLength) {
+        const counter = document.getElementById(counterId);
+        const length = input.value.length;
+        counter.textContent = `${length}/${maxLength}`;
+    // Update character counter
+    function updateCounter(input, counterId, progressId, maxLength) {
+        const counter = document.getElementById(counterId);
+        const progress = document.getElementById(progressId);
+        const length = input.value.length;
+        const percentage = (length / maxLength) * 100;
+        
+        counter.querySelector('span:last-child').textContent = `${length}/${maxLength} characters`;
+        progress.style.width = `${percentage}%`;
+        
+        counter.classList.remove('warning', 'error');
+        if (length > maxLength * 0.9) {
+            counter.classList.add('warning');
+        }
+        if (length >= maxLength) {
+            counter.classList.add('error');
+        }
+    }   const currentBio = document.getElementById('edit-bio').value;
+        const currentPartner = document.getElementById('edit-partner').value;
+        
+        hasUnsavedChanges = 
+            currentUsername !== originalData.username ||
+            currentBio !== originalData.bio ||
+            currentPartner !== originalData.partner;
+        
+        document.getElementById('unsaved-indicator').classList.toggle('show', hasUnsavedChanges);
+    }
+
+    // Get initials from username
+    function getInitials(name) {
+        if (!name) return 'U';
+        return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+
+    // Load user data on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            window.location.href = '/login.html';
+            return;
+        }
+
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+            try {
+                const user = JSON.parse(userData);
+                const username = user.userName || '';
+                const bio = localStorage.getItem('userBio') || '';
+                const partner = localStorage.getItem('adventurePartner') || '';
+                
+                document.getElementById('edit-username').value = username;
+                document.getElementById('edit-email').value = user.email || '';
+                document.getElementById('edit-bio').value = bio;
+                document.getElementById('edit-partner').value = partner;
+                
+                // Store original data
+                originalData = { username, bio, partner };
+                // Store original data
+                originalData = { username, bio, partner };
+                
+                // Update counters
+                updateCounter(document.getElementById('edit-username'), 'username-counter', 'username-progress', 30);
+                updateCounter(document.getElementById('edit-bio'), 'bio-counter', 'bio-progress', 200);
+                updateCounter(document.getElementById('edit-partner'), 'partner-counter', 'partner-progress', 50);
+                document.getElementById('avatar-initials').textContent = getInitials(username);
+                
+                // Load profile picture if exists
+                const profilePic = localStorage.getItem('profilePic');
+                const profilePicPreview = document.getElementById('profile-pic-preview');
+                if (profilePic) {
+                    profilePicPreview.innerHTML = `<img src="${profilePic}" class="w-full h-full object-cover" alt="Profile">`;
+                }
+            } catch (e) {
+                console.error('Error loading user data:', e);
+                showToast('Error loading profile data', 'error');
+            }
+        }
+
+        // Track changes on inputs
+        ['edit-username', 'edit-bio', 'edit-partner'].forEach(id => {
+        // Track changes on inputs
+        ['edit-username', 'edit-bio', 'edit-partner'].forEach(id => {
+            const input = document.getElementById(id);
+            input.addEventListener('input', () => {
+                trackChange();
+                if (id === 'edit-username') updateCounter(input, 'username-counter', 'username-progress', 30);
+                if (id === 'edit-bio') updateCounter(input, 'bio-counter', 'bio-progress', 200);
+                if (id === 'edit-partner') updateCounter(input, 'partner-counter', 'partner-progress', 50);
+            });
+        });Handle profile picture upload
+        const profilePicUpload = document.getElementById('profile-pic-upload');
+        const profilePicPreview = document.getElementById('profile-pic-preview');
+        profilePicUpload?.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file size (2MB max)
+                if (file.size > 2 * 1024 * 1024) {
+                    showToast('Image too large. Max size is 2MB', 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const imgData = event.target.result;
+                    profilePicPreview.innerHTML = `<img src="${imgData}" class="w-full h-full object-cover" alt="Profile">`;
+                    localStorage.setItem('profilePic', imgData);
+                    showToast('Profile picture updated', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Remove profile picture
+        document.getElementById('remove-pic-btn')?.addEventListener('click', () => {
+            localStorage.removeItem('profilePic');
+            const username = document.getElementById('edit-username').value;
+            profilePicPreview.innerHTML = `<span id="avatar-initials" class="text-white font-bold text-3xl">${getInitials(username)}</span>`;
+            showToast('Profile picture removed', 'info');
+        });
+
+        // Save profile changes
+        function saveChanges() {
+            const saveBtn = document.getElementById('save-profile-btn');
+            const saveIcon = document.getElementById('save-icon');
+            const saveText = document.getElementById('save-text');
+            
+            saveBtn.disabled = true;
+            saveIcon.textContent = 'hourglass_empty';
+            saveIcon.classList.add('loading-spinner');
+            saveText.textContent = 'Saving...';
+            
+            setTimeout(() => {
+                const newUsername = document.getElementById('edit-username').value.trim();
+                const newBio = document.getElementById('edit-bio').value.trim();
+                const newPartner = document.getElementById('edit-partner').value.trim();
+
+                if (!newUsername) {
+                    showToast('Username cannot be empty', 'error');
+                    saveBtn.disabled = false;
+                    saveIcon.textContent = 'save';
+                    saveIcon.classList.remove('loading-spinner');
+                    saveText.textContent = 'Save Changes';
+                    return;
+                }
+
+                // Update localStorage
+                localStorage.setItem('userBio', newBio);
+                localStorage.setItem('adventurePartner', newPartner);
+
+                // Update userData with new username
+                const userData = localStorage.getItem('userData');
+                if (userData) {
+                    try {
+                        const user = JSON.parse(userData);
+                        user.userName = newUsername;
+                        localStorage.setItem('userData', JSON.stringify(user));
+                        
+                        // Update avatar initials
+                        const avatarInitials = document.getElementById('avatar-initials');
+                        if (avatarInitials) {
+                            avatarInitials.textContent = getInitials(newUsername);
+                        }
+                    } catch (e) {
+                        console.error('Error updating user data:', e);
+                    }
+                }
+
+                // Update original data
+                originalData = { username: newUsername, bio: newBio, partner: newPartner };
+                hasUnsavedChanges = false;
+                document.getElementById('unsaved-indicator').classList.remove('show');
+
+                saveIcon.textContent = 'check_circle';
+                saveText.textContent = 'Saved!';
+                showToast('Profile updated successfully', 'success');
+                
+                setTimeout(() => {
+                    saveBtn.disabled = false;
+                    saveIcon.textContent = 'save';
+                    saveIcon.classList.remove('loading-spinner');
+                    saveText.textContent = 'Save Changes';
+                }, 1500);
+            }, 800);
+        }
+
+        document.getElementById('save-profile-btn')?.addEventListener('click', saveChanges);
+        document.getElementById('save-from-indicator')?.addEventListener('click', saveChanges);
+
+        // Discard changes
+        document.getElementById('discard-changes')?.addEventListener('click', () => {
+            document.getElementById('edit-username').value = originalData.username;
+            document.getElementById('edit-bio').value = originalData.bio;
+            document.getElementById('edit-partner').value = originalData.partner;
+            hasUnsavedChanges = false;
+            document.getElementById('unsaved-indicator').classList.remove('show');
+            showToast('Changes discarded', 'info');
+        });
+
+        // Cancel button
+        document.getElementById('cancel-btn')?.addEventListener('click', () => {
+            if (hasUnsavedChanges) {
+                if (confirm('You have unsaved changes. Are you sure you want to leave?')) {
+                    window.location.href = '/home.html';
+                }
+            } else {
+                window.location.href = '/home.html';
+            }
+        });
+
+        // Logout with confirmation
+        document.getElementById('logout-btn')?.addEventListener('click', () => {
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('cancel-logout')?.addEventListener('click', () => {
+            document.getElementById('confirm-modal').classList.add('hidden');
+        });
+
+        document.getElementById('modal-backdrop')?.addEventListener('click', () => {
+            document.getElementById('confirm-modal').classList.add('hidden');
+        });
+
+        document.getElementById('confirm-logout')?.addEventListener('click', () => {
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('userData');
+            localStorage.removeItem('userBio');
+            localStorage.removeItem('adventurePartner');
+            localStorage.removeItem('profilePic');
+            showToast('Logged out successfully', 'success');
+            setTimeout(() => {
+                window.location.href = '/login.html';
+            }, 500);
+        });
+
+        // Warn before leaving with unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    });
+</script>
+</body>
+</html>

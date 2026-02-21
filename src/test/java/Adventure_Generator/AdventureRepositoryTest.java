@@ -34,7 +34,7 @@ class AdventureRepositoryTest {
     }
 
     private Adventure buildAdventure(User user, String adventureText, String mood, String weather, boolean longDistance) {
-        return adventureRepository.save(new Adventure(adventureText, user, mood, weather, longDistance, false));
+        return adventureRepository.save(new Adventure(adventureText, user, mood, weather, longDistance));
     }
 
     @Test

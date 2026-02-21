@@ -20,27 +20,21 @@ import Adventure_generator.Repository.AdventureRepository;
 import jakarta.annotation.PostConstruct;
 
 /**
- * Adventure Service
+ * Service layer for adventure generation and management.
  * 
- * Business logic layer for adventure generation and management.
- * Loads adventure ideas from JSON file and filters based on user preferences.
- * Persists generated adventures to database with user associations.
- * 
- * Features:
- * - Loads adventure data from adventures.json on application startup
- * - Filters adventures by mood, weather conditions, and distance preference
+ * Handles business logic for:
+ * - Loading adventure ideas from JSON resource file on startup
+ * - Filtering adventures by user preferences (mood, weather, distance)
  * - Random selection from filtered adventure pool
- * - Saves generated adventures with user metadata
- * - Retrieves user's adventure history
+ * - Persisting generated adventures to database with user associations
+ * - Retrieving user's adventure history
  * 
- * Adventure Filtering:
- * - Mood: happy, relaxed, energetic, romantic
+ * Adventure Filtering Logic:
+ * - Mood: happy, relaxed, energetic, romantic, neutral
  * - Weather: clear, rain, snow, any
- * - Distance: regular or long-distance
+ * - Distance: local or long-distance
  * 
- * @author Astra K. Nguyen
- * @version 1.0.0
- * @since 2026-01-28
+ * Data Source: adventures.json loaded at application startup via @PostConstruct
  */
 @Service
 public class AdventureService {
@@ -52,7 +46,12 @@ public class AdventureService {
     private AdventureRepository adventureRepository;
 
     /**
-     * Load adventure ideas from JSON file on startup.
+     * Loads adventure ideas from JSON file on application startup.
+     * 
+     * Uses Jackson ObjectMapper to deserialize adventures.json from classpath resources.
+     * If loading fails, initializes with empty list and logs error.
+     * 
+     * @PostConstruct ensures this runs once after dependency injection
      */
     @PostConstruct
     public void loadAdventures(){
@@ -69,12 +68,15 @@ public class AdventureService {
     }
 
     /**
-     * Generate a random adventure based on mood, weather, and distance preference.
+     * Generates a random adventure based on user preferences.
      * 
-     * @param mood the user's current mood
-     * @param weather the current weather condition
-     * @param longDistance whether it's a long-distance adventure
-     * @return adventure suggestion text
+     * Filters adventures by mood, weather, and distance preference, then randomly
+     * selects one from the filtered pool. Falls back to default message if no matches.
+     * 
+     * @param mood User's current mood (e.g., 'energetic', 'relaxed')
+     * @param weather Current weather condition (e.g., 'clear', 'rain')
+     * @param longDistance Whether long-distance travel is preferred
+     * @return Adventure suggestion text
      */
     public String generateAdventure(String mood, String weather, boolean longDistance){
         logger.debug("generateAdventure called with mood={}, weather={}, longDistance={}", mood, weather, longDistance);

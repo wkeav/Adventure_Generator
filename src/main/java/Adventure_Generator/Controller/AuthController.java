@@ -1,25 +1,5 @@
 package Adventure_generator.Controller;
 
-/**
- * Authentication Controller
- * 
- * REST API controller for user authentication operations.
- * Handles user registration and login with JWT token generation.
- * 
- * Endpoints:
- * - POST /api/auth/registrations - User registration
- * - POST /api/auth/sessions - User login
- * 
- * Security:
- * - Publicly accessible endpoints (no JWT required for login/register)
- * - Password validation and encryption
- * - JWT token generation on successful authentication
- * 
- * @author Astra K. Nguyen
- * @version 1.0.0
- * @since 2026-01-28
- */
-
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -38,26 +18,49 @@ import Adventure_generator.DTOs.Response.UserData;
 import Adventure_generator.Entity.User;
 import Adventure_generator.Service.AuthenticationService;
 import Adventure_generator.Util.JwtUtil;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-
+/**
+ * REST controller for user authentication operations.
+ * 
+ * Provides HTTP endpoints for:
+ * - POST /api/auth/registrations - User registration with validation
+ * - POST /api/auth/sessions - User login with JWT token generation
+ * 
+ * Security:
+ * - Publicly accessible (no JWT required for login/register)
+ * - Password validation and BCrypt encryption via AuthenticationService
+ * - JWT token generation on successful authentication
+ * - Email uniqueness validation
+ * 
+ * Response Flow:
+ * 1. Client sends registration/login request
+ * 2. Server validates input (Jakarta Bean Validation)
+ * 3. AuthenticationService processes business logic
+ * 4. JwtUtil generates token if successful
+ * 5. AuthResponse returned with token and user data
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    
     private final AuthenticationService authenticationService;
     private final JwtUtil jwtUtil;
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
-    
     public AuthController(AuthenticationService authenticationService, JwtUtil jwtUtil) {
         this.authenticationService = authenticationService;
         this.jwtUtil = jwtUtil;
     }
 
-    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
-
+    /**
+     * Registers a new user account.
+     * 
+     * Validates password match, creates user with encrypted password,
+     * generates JWT token, and returns auth response with user data.
+     * 
+     * @param registerRequest Contains email, password, confirmPassword, userName
+     * @return ResponseEntity with AuthResponse (token + user data) or error
+     */
     @PostMapping(value = "/registrations", produces = "application/json", consumes = "application/json")
     public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
 
@@ -71,7 +74,7 @@ public class AuthController {
                 return ResponseEntity.badRequest().body(errorAuthResponse);
             }
             User newUser = authenticationService.registerUser(email, password, userName);
-            UserData userData = new UserData(
+            UserData userData = new UserData( 
                 newUser.getId(),
                 newUser.getEmail(),
                 newUser.getUserName(),
@@ -88,6 +91,15 @@ public class AuthController {
         }
     }
     
+    /**
+     * Authenticates existing user and generates JWT token.
+     * 
+     * Validates credentials, retrieves user data, generates JWT token,
+     * and returns auth response for successful login.
+     * 
+     * @param loginRequest Contains email and password
+     * @return ResponseEntity with AuthResponse (token + user data) or 401 unauthorized
+     */
     @PostMapping(value = "/sessions", produces = "application/json", consumes = "application/json")
     public ResponseEntity<AuthResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getEmail();

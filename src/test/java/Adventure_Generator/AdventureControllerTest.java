@@ -68,7 +68,7 @@ class AdventureControllerTest {
         request.setLongDistance(false);
 
         when(adventureService.generateAdventure(eq("happy"), eq("clear"), eq(false))).thenReturn("Picnic");
-        Adventure saved = new Adventure("Picnic", user, "happy", "clear", false, false);
+        Adventure saved = new Adventure("Picnic", user, "happy", "clear", false);
         saved.setId(5L);
         when(adventureService.saveAdventure(eq("Picnic"), eq(user), eq("happy"), eq("clear"), eq(false))).thenReturn(saved);
 
@@ -87,7 +87,7 @@ class AdventureControllerTest {
         User user = buildUser();
         setAuthentication(user);
 
-        Adventure adv = new Adventure("Hike", user, "energetic", "clear", false, false);
+        Adventure adv = new Adventure("Hike", user, "energetic", "clear", false);
         adv.setId(2L);
         when(adventureService.getUserAdventures(user.getId())).thenReturn(List.of(adv));
 

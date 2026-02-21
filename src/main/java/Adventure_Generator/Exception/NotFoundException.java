@@ -1,15 +1,30 @@
 package Adventure_generator.Exception;
+
 /**
- * Exception thrown when a requested resource is not found.
- * Used for returning 404 HTTP responses.
+ * Exception thrown when a requested resource is not found in the database.
  * 
- * @author Astra K. Nguyen
- * @version 1.0.0
+ * Used primarily for returning 404 HTTP responses when:
+ * - User requests a non-existent adventure
+ * - Adventure or User entity lookup fails
+ * - Favorite relationship doesn't exist
+ * 
+ * This is a RuntimeException, so it doesn't require explicit throws declarations.
  */
 public class NotFoundException extends RuntimeException {
+    
+    /**
+     * Constructs a new NotFoundException with the specified detail message.
+     * @param message The detail message explaining what was not found
+     */
     public NotFoundException(String message){
-        super(message); // Calls RunTimeException parent 
+        super(message);
     }
+    
+    /**
+     * Constructs a new NotFoundException with the specified detail message and cause.
+     * @param message The detail message explaining what was not found
+     * @param cause The underlying cause of the exception
+     */
     public NotFoundException(String message, Throwable cause){
         super(message, cause);
     }

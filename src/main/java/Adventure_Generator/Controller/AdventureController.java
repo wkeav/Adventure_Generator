@@ -19,26 +19,24 @@ import Adventure_generator.Repository.UserRepository;
 import Adventure_generator.Service.AdventureService;
 
 /**
- * Adventure Controller
+ * REST controller for adventure generation and management endpoints.
  * 
- * REST API controller for adventure generation and management.
- * Handles requests for generating personalized adventures and retrieving user's adventure history.
- * All endpoints require JWT authentication.
- * 
- * Endpoints:
- * - POST /api/adventures/generate - Generate new adventure based on mood, weather, and distance
+ * Provides HTTP endpoints for:
+ * - POST /api/adventures/generate - Generate personalized adventure
  * - GET /api/adventures/history - Retrieve user's adventure history
  * 
  * Security:
- * - Requires valid JWT token in Authorization header
- * - Extracts authenticated user from SecurityContext
- * - User-specific data isolation
+ * - All endpoints require JWT authentication
+ * - User extracted from SecurityContextHolder (set by JwtAuthenticationFilter)
+ * - Adventures are user-scoped (users can only see their own)
  * 
- * @author Astra K. Nguyen
- * @version 1.0.0
- * @since 2026-01-28
+ * Request Flow:
+ * 1. Client sends JWT token in Authorization header
+ * 2. JwtAuthenticationFilter validates token and sets Authentication
+ * 3. Controller extracts username from SecurityContext
+ * 4. Service layer processes business logic
+ * 5. Response returned as JSON
  */
-
 @RestController
 @RequestMapping(path = "/api/adventures")
 public class AdventureController {
@@ -52,8 +50,13 @@ public class AdventureController {
     }
 
     /**
-     * Generate and save a new adventure based on mood, weather, and distance preference
-     * Requires authentication - saves adventure to the logged-in user
+     * Generates and persists a new adventure based on user preferences.
+     * 
+     * Requires authenticated user. Generates adventure text filtered by mood, weather,
+     * and distance preference, then saves to database associated with current user.
+     * 
+     * @param adventureRequest Contains mood, weather, and longDistance preferences
+     * @return ResponseEntity with AdventureResponse (adventure text and ID) or error
      */
     @PostMapping(value = "/generate", produces = "application/json")
     public ResponseEntity<AdventureResponse> generateAdventure(@RequestBody AdventureRequest adventureRequest) {
@@ -104,8 +107,12 @@ public class AdventureController {
     }
     
     /**
-     * Get all adventures for the currently authenticated user.
-     * Returns adventures ordered by newest first.
+     * Retrieves adventure history for the authenticated user.
+     * 
+     * Returns all adventures created by the current user, ordered by creation date
+     * descending (newest first). User identity extracted from JWT token.
+     * 
+     * @return ResponseEntity with List of Adventure entities or 500 on error
      */
     @GetMapping(value = "/history", produces = "application/json")
     public ResponseEntity<List<Adventure>> getUserAdventureHistory() {
