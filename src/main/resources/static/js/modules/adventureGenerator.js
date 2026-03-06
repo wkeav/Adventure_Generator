@@ -70,7 +70,7 @@ export class AdventureGenerator {
 
         // Map weather description to adventures JSON 
         let weather = 'clear'; // default 
-        if (weatherDesc.includes('rain') || weatherDesc.includes('drizzle') || weatherDesc.includes('shower') || weatherDesc.includes('mist')) {
+        if (weatherDesc.includes('rain') || weatherDesc.includes('drizzle') || weatherDesc.includes('shower') || weatherDesc.includes('mist') || weatherDesc.includes('broken clouds')) {
             weather = 'rain';
         } else if (weatherDesc.includes('snow')) {
             weather = 'snow';
