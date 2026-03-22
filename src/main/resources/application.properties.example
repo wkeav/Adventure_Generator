@@ -18,3 +18,24 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
 # JWT token
 JWT.SECRET=your_secret_token_here
+
+# Logging
+logging.level.com.zaxxer.hikari=WARN
+logging.level.org.postgresql=WARN
+logging.level.org.springframework.jdbc=WARN
+logging.level.Adventure_generator.Config.JwtAuthenticationFilter=DEBUG
+logging.level.Adventure_generator=DEBUG
+logging.level.org.springframework.security=DEBUG
+
+# Gemini API Key (Get from Google AI Studio: https://makersuite.google.com/app/apikey)
+gemini.api.key=${GEMINI_API_KEY:your-api-key-here}
+
+# Gemini API Endpoint
+gemini.api.url=https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent
+
+# Model Configuration
+gemini.model=gemini-pro
+gemini.temperature=0.7
+gemini.max.tokens=1024
+gemini.top.p=0.9
+gemini.top.k=40
