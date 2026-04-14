@@ -1,6 +1,7 @@
 package Adventure_generator.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,8 @@ import Adventure_generator.Entity.Adventure;
 import Adventure_generator.Entity.User;
 import Adventure_generator.Repository.UserRepository;
 import Adventure_generator.Service.AdventureService;
+
+import Adventure_generator.Service.GeminiAdventureService;
 
 /**
  * REST controller for adventure generation and management endpoints.
@@ -42,10 +45,14 @@ import Adventure_generator.Service.AdventureService;
 public class AdventureController {
 
     private final AdventureService adventureService;
+    private final GeminiAdventureService geminiAdventureService;
     private final UserRepository userRepository;
 
-    public AdventureController(AdventureService adventureService, UserRepository userRepository) {
+    public AdventureController(AdventureService adventureService,
+                               GeminiAdventureService geminiAdventureService,
+                               UserRepository userRepository) {
         this.adventureService = adventureService;
+        this.geminiAdventureService = geminiAdventureService;
         this.userRepository = userRepository;
     }
 
@@ -66,9 +73,15 @@ public class AdventureController {
 
         try {
             if (mood != null && weather != null) {
-                // Generate adventure text
-                String adventureText = adventureService.generateAdventure(mood, weather, longDistance);
-                
+                // Try Gemini first, fall back to static JSON if unavailable
+                String adventureText;
+                try {
+                    adventureText = geminiAdventureService.generateAdventure(mood, weather, longDistance);
+                } catch (Exception e) {
+                    System.err.println("Gemini unavailable, falling back to static adventures: " + e.getMessage());
+                    adventureText = adventureService.generateAdventure(mood, weather, longDistance);
+                }
+
                 // Get currently authenticated user
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 String username = (String) authentication.getPrincipal();
@@ -131,5 +144,23 @@ public class AdventureController {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
+    }
+
+    // ── New: Chat endpoint ───────────────────────────────────────
+    @PostMapping(value = "/chat", produces = "application/json")
+    public ResponseEntity<Map<String, String>> chat(@RequestBody Map<String, String> body) {
+        String reply = geminiAdventureService.chat(body.get("message"));
+        return ResponseEntity.ok(Map.of("reply", reply));
+    }
+
+    // ── New: Mood prediction endpoint ────────────────────────────
+    @PostMapping(value = "/mood/predict", produces = "application/json")
+    public ResponseEntity<String> predictMood(@RequestBody Map<String, String> body) {
+        String prediction = geminiAdventureService.predictMood(
+            body.get("weather"),
+            body.get("timeOfDay"),
+            body.get("season")
+        );
+        return ResponseEntity.ok(prediction);
     }
 }
