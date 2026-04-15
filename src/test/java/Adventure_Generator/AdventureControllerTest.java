@@ -25,6 +25,7 @@ import Adventure_generator.DTOs.Requests.AdventureRequest;
 import Adventure_generator.DTOs.Response.AdventureResponse;
 import Adventure_generator.Entity.Adventure;
 import Adventure_generator.Entity.User;
+import Adventure_generator.Repository.UserRepository;
 import Adventure_generator.Service.AdventureService;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +33,9 @@ class AdventureControllerTest {
 
     @Mock
     private AdventureService adventureService;
+
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private AdventureController adventureController;
@@ -47,7 +51,7 @@ class AdventureControllerTest {
     }
 
     private void setAuthentication(User user) {
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, List.of());
+        Authentication auth = new UsernamePasswordAuthenticationToken(user.getUserName(), null, List.of());
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
@@ -67,6 +71,7 @@ class AdventureControllerTest {
         request.setWeather("clear");
         request.setLongDistance(false);
 
+        when(userRepository.findByUserName(eq("controllerUser"))).thenReturn(java.util.Optional.of(user));
         when(adventureService.generateAdventure(eq("happy"), eq("clear"), eq(false))).thenReturn("Picnic");
         Adventure saved = new Adventure("Picnic", user, "happy", "clear", false);
         saved.setId(5L);
@@ -87,6 +92,7 @@ class AdventureControllerTest {
         User user = buildUser();
         setAuthentication(user);
 
+        when(userRepository.findByUserName(eq("controllerUser"))).thenReturn(java.util.Optional.of(user));
         Adventure adv = new Adventure("Hike", user, "energetic", "clear", false);
         adv.setId(2L);
         when(adventureService.getUserAdventures(user.getId())).thenReturn(List.of(adv));

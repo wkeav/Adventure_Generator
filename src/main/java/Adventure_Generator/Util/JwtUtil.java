@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import Adventure_generator.DTOs.Response.UserData;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -230,8 +231,12 @@ public class JwtUtil implements Serializable {
      * @return true if token is valid, signature matches, username matches, and not expired
      */
     public Boolean validateToken(String token, String username){
-        final String userName = getUsernameFromToken(token);
-        return (userName.equals(username) && !isTokenExpired(token));
+        try {
+            final String userName = getUsernameFromToken(token);
+            return (userName.equals(username) && !isTokenExpired(token));
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
     
     /**
