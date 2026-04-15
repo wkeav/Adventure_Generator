@@ -20,6 +20,7 @@ public class AdventureRequest {
     private String mood;
     private String weather;
     private Boolean longDistance; 
+    private Boolean aiGenerated = false; 
 
     /** Default constructor with neutral preferences */
     public AdventureRequest(){
@@ -84,6 +85,14 @@ public class AdventureRequest {
     
     public void setLongDistance(Boolean longDistance) {
         this.longDistance = longDistance;
+    }
+
+    public Boolean getAiGenerated() {
+        return aiGenerated;
+    }
+
+    public void setAiGenerated(Boolean aiGenerated) {
+        this.aiGenerated = aiGenerated;
     }
 
     @Override

@@ -3,6 +3,8 @@ package Adventure_generator.Controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +46,9 @@ import Adventure_generator.Service.GeminiAdventureService;
 @RequestMapping(path = "/api/adventures")
 public class AdventureController {
 
+
+    private static final Logger logger = LoggerFactory.getLogger(AdventureController.class);
+   
     private final AdventureService adventureService;
     private final GeminiAdventureService geminiAdventureService;
     private final UserRepository userRepository;
@@ -75,10 +80,21 @@ public class AdventureController {
             if (mood != null && weather != null) {
                 // Try Gemini first, fall back to static JSON if unavailable
                 String adventureText;
-                try {
-                    adventureText = geminiAdventureService.generateAdventure(mood, weather, longDistance);
-                } catch (Exception e) {
-                    System.err.println("Gemini unavailable, falling back to static adventures: " + e.getMessage());
+
+                if (Boolean.TRUE.equals(adventureRequest.getAiGenerated())) {
+                    // AI Mode — call Gemini
+                    logger.debug("AI mode enabled — calling Gemini");
+                    try {
+                        adventureText = geminiAdventureService.generateAdventure(
+                            mood, weather, longDistance
+                        );
+                    } catch (Exception e) {
+                        logger.warn("Gemini failed, falling back to static JSON: {}", e.getMessage());
+                        adventureText = adventureService.generateAdventure(mood, weather, longDistance);
+                    }
+                } else {
+                    // Default mode — static JSON
+                    logger.debug("Default mode — using static adventures.json");
                     adventureText = adventureService.generateAdventure(mood, weather, longDistance);
                 }
 
@@ -146,14 +162,14 @@ public class AdventureController {
         }
     }
 
-    // ── New: Chat endpoint ───────────────────────────────────────
+    // Chat endpoint
     @PostMapping(value = "/chat", produces = "application/json")
     public ResponseEntity<Map<String, String>> chat(@RequestBody Map<String, String> body) {
         String reply = geminiAdventureService.chat(body.get("message"));
         return ResponseEntity.ok(Map.of("reply", reply));
     }
 
-    // ── New: Mood prediction endpoint ────────────────────────────
+    // Mood prediction endpoint
     @PostMapping(value = "/mood/predict", produces = "application/json")
     public ResponseEntity<String> predictMood(@RequestBody Map<String, String> body) {
         String prediction = geminiAdventureService.predictMood(

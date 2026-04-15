@@ -46,7 +46,7 @@ public class GeminiAdventureService {
         this.gson = new Gson();
     }
 
-    // ── Feature 1: Dynamic Adventure Narration ──────────────────
+    // Dynamic Adventure Narration 
 
     /**
      * Generates a narrative adventure suggestion using Gemini Pro.
@@ -62,15 +62,14 @@ public class GeminiAdventureService {
         return callGemini(prompt);
     }
 
-    // ── Feature 2: Mood Prediction ──────────────────────────────
-
+    // Mood Prediction 
     /**
      * Predicts user mood from context clues (weather, time, season).
      * Returns one of: happy, relaxed, energetic, romantic
      */
     public String predictMood(String weather, String timeOfDay, String season) {
         String prompt = String.format("""
-                Based on this context, predict the most likely mood for someone planning an adventure.
+                Based on this context, predict the most likely mood for someone planning an adventure/ date 
                 
                 Context:
                 - Weather: %s
@@ -85,15 +84,12 @@ public class GeminiAdventureService {
         return cleanJson(raw);
     }
 
-    // ── Feature 3: Adventure Chat ────────────────────────────────
-
+    // Adventure Chat 
     /**
      * Chat-style interaction for adventure planning help.
-     * Keeps it warm, concise and actionable.
      */
     public String chat(String userMessage) {
         String prompt = String.format("""
-                You are an enthusiastic adventure planner for couples and friends.
                 Help users discover fun activities based on their mood, weather, and preferences.
                 Keep responses concise, warm, and actionable. Suggest 1-2 specific ideas max.
                 
@@ -103,10 +99,9 @@ public class GeminiAdventureService {
         return callGemini(prompt);
     }
 
-    // ── Feature 4: Review Sentiment Analysis ────────────────────
-
+    // Review Sentiment Analysis
     /**
-     * Analyzes sentiment of a user-submitted adventure review.
+     * Analyzes sentiment of a user-submitted adventure review and based it off for next adventures. 
      */
     public String analyzeReview(String reviewText, String adventureName) {
         String prompt = String.format("""
@@ -127,8 +122,7 @@ public class GeminiAdventureService {
         return cleanJson(callGemini(prompt));
     }
 
-    // ── Generate Multiple Adventures ────────────────────────────
-
+    // Generate Multiple Adventures 
     public List<String> generateMultipleAdventures(String mood, String weather, boolean longDistance, int count) {
         List<String> adventures = new ArrayList<>();
         for (int i = 0; i < count; i++) {
@@ -137,30 +131,29 @@ public class GeminiAdventureService {
         return adventures;
     }
 
-    // ── Private Helpers ──────────────────────────────────────────
-
+    // Private Helpers
     private String buildAdventurePrompt(String mood, String weather, boolean longDistance) {
         String distanceContext = longDistance
-                ? "This is for a long-distance couple — suggest virtual or mail-based activities."
-                : "This is for people in the same location.";
+                ? "This is for a long-distance couples/ friends — suggest virtual or mail-based activities."
+                : "This is for people in the same location or distance.";
 
         String moodGuidance = switch (mood.toLowerCase()) {
-            case "happy"     -> "They are joyful and playful. Suggest something fun and energizing.";
+            case "happy"     -> "They are joyful and playful. Suggest something fun and energizing. ";
             case "relaxed"   -> "They are calm and cozy. Suggest something soothing and low-effort.";
-            case "energetic" -> "They are full of energy. Suggest something active and exciting.";
-            case "romantic"  -> "They are feeling loving. Suggest something heartfelt and intimate.";
+            case "energetic" -> "They are full of energy. Suggest something active and exciting, contains moderate or a lot of energy.";
+            case "romantic"  -> "They are feeling loving and sweet. Suggest something heartfelt and intimate.";
             default          -> "Suggest a generally fun and memorable activity.";
         };
 
         return String.format("""
-                You are a warm and creative adventure planner.
+                You are a sweet and creative adventure planner.
                 
                 User context:
                 - Mood: %s (%s)
                 - Weather: %s
                 - Distance: %s
                 
-                Write ONE adventure idea as a short engaging narrative (2-4 sentences).
+                Write ONE adventure idea as a short engaging narrative (2-3 sentences).
                 Make it feel personal and exciting. No bullet points, no JSON, just plain text.
                 """, mood, moodGuidance, weather, distanceContext);
     }
@@ -170,7 +163,7 @@ public class GeminiAdventureService {
      * Uses WebClient (non-blocking) but blocks for simplicity in sync controller flow.
      */
     private String callGemini(String prompt) {
-        // Build request JSON
+        // Build request JSON from bottom up, textPart -> parts -> content ->
         JsonObject textPart = new JsonObject();
         textPart.addProperty("text", prompt);
 
@@ -199,11 +192,10 @@ public class GeminiAdventureService {
             String responseBody = webClient.post()
                     .uri(url)
                     .header("Content-Type", "application/json")
-                    .bodyValue(gson.toJson(requestBody))
+                    .bodyValue(gson.toJson(requestBody)) // json 
                     .retrieve()
                     .bodyToMono(String.class)
-                    .block(); // blocks — keeps existing sync controller flow working
-
+                    .block(); // converts async -> sync
             return extractText(responseBody);
 
         } catch (Exception e) {
@@ -214,7 +206,7 @@ public class GeminiAdventureService {
 
     /**
      * Extracts text from Gemini's nested JSON:
-     * candidates[0].content.parts[0].text
+     * candidates[0] → content → parts[0] → text
      */
     private String extractText(String responseBody) {
         JsonObject root = gson.fromJson(responseBody, JsonObject.class);
@@ -226,7 +218,7 @@ public class GeminiAdventureService {
                 .get(0).getAsJsonObject()
                 .get("text").getAsString();
 
-        return cleanJson(text);
+        return cleanJson(text); // to get plain text
     }
 
     private String cleanJson(String text) {

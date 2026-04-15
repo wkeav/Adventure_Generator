@@ -154,6 +154,26 @@
         </div>
       </div>
     </div>
+    <!-- AI Toggle — sits above generate button -->
+    <div class="flex items-center justify-center gap-3 mb-4">
+        <label class="flex items-center gap-2 cursor-pointer select-none">
+            <span class="text-sm text-amber-700 font-medium">AI Generated</span>
+            <div class="relative">
+                <input type="checkbox" id="ai-toggle" class="sr-only peer" />
+                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer 
+                            peer-checked:after:translate-x-full 
+                            rtl:peer-checked:after:-translate-x-full 
+                            peer-checked:after:border-white 
+                            after:content-[''] after:absolute after:top-[2px] after:start-[2px] 
+                            after:bg-white after:border-gray-300 after:border after:rounded-full 
+                            after:h-4 after:w-4 after:transition-all 
+                            peer-checked:bg-purple-500">
+                </div>
+            </div>
+        </label>
+        <span id="ai-toggle-hint" class="text-xs text-gray-400">Using curated adventures</span>
+    </div>
+
     <!-- Generate button -->
                         <div class="flex justify-center">
                             <button type="submit" form="adventure-form" id="generate-btn" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-3 px-6 rounded-full flex items-center gap-2 transform hover:scale-105 transition-all">
