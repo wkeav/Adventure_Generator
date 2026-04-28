@@ -14,6 +14,11 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 
 /**
  * Adventure Entity - Generated adventure recommendations for users
@@ -54,7 +59,11 @@ public class Adventure {
     @NotBlank(message="Adventure is required")
     @Column(columnDefinition="TEXT", nullable=false)
     private String adventure;
-    
+
+    // Parent to userFavvourite 
+    @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserFavourite> favourites = new ArrayList<>();
+
     /** Foreign key reference to User entity. LAZY loaded to optimize performance. Non-nullable. */
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false)
@@ -166,6 +175,10 @@ public class Adventure {
 
     public Boolean getIsLongDistance() {
         return isLongDistance;
+    }
+
+    public List<UserFavourite> getFavourites() {
+        return favourites;
     }
 
     /**

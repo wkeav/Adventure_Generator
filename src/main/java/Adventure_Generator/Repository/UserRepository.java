@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import Adventure_generator.Entity.User;
+import Adventure_generator.Entity.UserFavourite;
 
 /**
  * Repository for User entity providing authentication and user lookup operations.
@@ -40,4 +41,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return true if email exists, false otherwise
      */
     boolean existsByEmail(String email);
+
+    
 }

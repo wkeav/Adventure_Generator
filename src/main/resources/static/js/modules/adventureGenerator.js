@@ -91,14 +91,17 @@ export class AdventureGenerator {
 
         // Map weather description to adventures JSON 
         let weather = 'clear';
-        if (weatherDesc.includes('rain') || weatherDesc.includes('drizzle') || weatherDesc.includes('shower') || weatherDesc.includes('mist') || weatherDesc.includes('broken clouds')) {
+        if (weatherDesc.includes('rain') || weatherDesc.includes('drizzle') || 
+            weatherDesc.includes('shower') || weatherDesc.includes('mist') || 
+            weatherDesc.includes('broken clouds')) {
             weather = 'rain';
         } else if (weatherDesc.includes('snow')) {
             weather = 'snow';
-        } else if (weatherDesc.includes('clear') || weatherDesc.includes('sunny') || weatherDesc.includes('sky')) {
+        } else if (weatherDesc.includes('clear') || weatherDesc.includes('sunny') || 
+                   weatherDesc.includes('sky')) {
             weather = 'clear';
         } else {
-            weather = 'any';
+            weather = 'clear' || 'any' 
         }
 
         try {
@@ -126,11 +129,42 @@ export class AdventureGenerator {
             // Update UI with result
             const adventureDesc = document.getElementById('adventure-description');
             const moodBadge = document.getElementById('mood-badge');
-            if (adventureDesc) adventureDesc.textContent = data.adventure || data.message;
+            if (adventureDesc) adventureDesc.textContent = data.adventureIdea;
             if (moodBadge) moodBadge.textContent = selectedMood;
+
+            // Wire bookmark button with the returned adventureId
+            const bookmarkBtn = document.querySelector('.material-symbols-outlined.text-indigo-600')?.closest('button');
+            if (bookmarkBtn && data.adventureId) {
+                bookmarkBtn.onclick = () => this.toggleFavourite(data.adventureId, bookmarkBtn);
+            }
 
         } catch(error) {
             console.error('Error:', error);
+        }
+    }
+
+    async toggleFavourite(adventureId, button) {
+        const token = localStorage.getItem('jwtToken');
+        try {
+            const response = await fetch(`/api/favourites/toggle/${adventureId}`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await response.json();
+
+            // Toggle bookmark icon visually
+            const icon = button.querySelector('.material-symbols-outlined');
+            if (data.favourited) {
+                icon.textContent = 'bookmark_added'; // filled
+                button.classList.add('bg-indigo-300');
+            } else {
+                icon.textContent = 'bookmark';       // empty
+                button.classList.remove('bg-indigo-300');
+            }
+
+            console.log(data.message);
+        } catch (error) {
+            console.error('Error toggling favourite:', error);
         }
     }
 }
