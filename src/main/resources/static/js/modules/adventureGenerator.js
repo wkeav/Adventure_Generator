@@ -91,14 +91,17 @@ export class AdventureGenerator {
 
         // Map weather description to adventures JSON 
         let weather = 'clear';
-        if (weatherDesc.includes('rain') || weatherDesc.includes('drizzle') || weatherDesc.includes('shower') || weatherDesc.includes('mist') || weatherDesc.includes('broken clouds')) {
+        if (weatherDesc.includes('rain') || weatherDesc.includes('drizzle') || 
+            weatherDesc.includes('shower') || weatherDesc.includes('mist') || 
+            weatherDesc.includes('broken clouds')) {
             weather = 'rain';
         } else if (weatherDesc.includes('snow')) {
             weather = 'snow';
-        } else if (weatherDesc.includes('clear') || weatherDesc.includes('sunny') || weatherDesc.includes('sky')) {
+        } else if (weatherDesc.includes('clear') || weatherDesc.includes('sunny') || 
+                   weatherDesc.includes('sky')) {
             weather = 'clear';
         } else {
-            weather = 'any';
+            weather = 'clear' || 'any' 
         }
 
         try {
@@ -123,14 +126,50 @@ export class AdventureGenerator {
             const data = await response.json();
             console.log('Adventure generated:', data);
 
-            // Update UI with result
             const adventureDesc = document.getElementById('adventure-description');
             const moodBadge = document.getElementById('mood-badge');
-            if (adventureDesc) adventureDesc.textContent = data.adventure || data.message;
+            const bookmarkBtn = document.getElementById('bookmark-btn');
+
+            const adventureId = data.adventureId || data.id || data.adventure?.id;
+            if (!adventureId) {
+                console.warn('No adventureId returned from /api/adventures/generate', data);
+            }
+
+            if (adventureDesc) adventureDesc.textContent = data.adventureIdea;
             if (moodBadge) moodBadge.textContent = selectedMood;
+
+            if (bookmarkBtn && adventureId) {
+                bookmarkBtn.onclick = () => this.toggleFavourite(adventureId, bookmarkBtn);
+                bookmarkBtn.dataset.adventureId = adventureId;
+            }
 
         } catch(error) {
             console.error('Error:', error);
+        }
+    }
+
+    async toggleFavourite(adventureId, button) {
+        const token = localStorage.getItem('jwtToken');
+        try {
+            const response = await fetch(`/api/favourites/toggle/${adventureId}`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await response.json();
+
+            // Toggle bookmark icon visually
+            const icon = button.querySelector('.material-symbols-outlined');
+            if (data.favourited) {
+                icon.textContent = 'bookmark_added'; // filled
+                button.classList.add('bg-indigo-300');
+            } else {
+                icon.textContent = 'bookmark';       // empty
+                button.classList.remove('bg-indigo-300');
+            }
+
+            console.log(data.message);
+        } catch (error) {
+            console.error('Error toggling favourite:', error);
         }
     }
 }

@@ -10,6 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 
 /**
  * User Entity - Application user accounts
@@ -49,13 +54,19 @@ public class User {
     @Column(nullable=false, unique=true)
     private String userName;
     
-    /** Hashed password using BCrypt. Never store plain text passwords. */
+    /** Hashed password using BCrypt. */
     @Column(nullable=false)
     private String password;
 
     @Column(nullable=false, updatable=false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Adventure> adventures = new ArrayList<>();
     
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserFavourite> favourites = new ArrayList<>();
+
     // CONSTRUCTOR
     public User(){
     }
@@ -139,6 +150,35 @@ public class User {
     public String toString() {
         return "User [id=" + id + ", email=" + email + ", userName=" + userName + ", password=[PROTECTED]"
             + ", createdAt=" + createdAt + "]";
+    }
+
+    // Helper methods
+    public void addAdventure(Adventure adventure) {
+        adventures.add(adventure); // add to User's list
+        adventure.setUser(this);    // Set adventure to corresponding user (this user)
+    }
+
+    public void removeAdventure(Adventure adventure) {
+        adventures.remove(adventure);
+        adventure.setUser(null);
+    }
+
+    public void addFavourite(UserFavourite favourite) {
+        favourites.add(favourite);
+        favourite.setUser(this);
+    }
+
+    public void removeFavourite(UserFavourite favourite) {
+        favourites.remove(favourite);
+        favourite.setUser(null);
+    }
+
+    public List<Adventure> getAdventures() {
+        return adventures;
+    }
+
+    public List<UserFavourite> getFavourites() {
+        return favourites;
     }
 
 
