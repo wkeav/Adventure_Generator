@@ -162,7 +162,7 @@ public class FavouriteController {
         String username = (String) authentication.getPrincipal();
         
         // Fetch user from database, throw exception if not found
-        User user = userRepositsory.findByUserName(username)
+        User user = userRepository.findByUserName(username)
             .orElseThrow(() -> new RuntimeException("User not found"));
         
         // Fetch adventure from database, throw exception if not found
