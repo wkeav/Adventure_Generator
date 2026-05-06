@@ -126,16 +126,21 @@ export class AdventureGenerator {
             const data = await response.json();
             console.log('Adventure generated:', data);
 
-            // Update UI with result
             const adventureDesc = document.getElementById('adventure-description');
             const moodBadge = document.getElementById('mood-badge');
+            const bookmarkBtn = document.getElementById('bookmark-btn');
+
+            const adventureId = data.adventureId || data.id || data.adventure?.id;
+            if (!adventureId) {
+                console.warn('No adventureId returned from /api/adventures/generate', data);
+            }
+
             if (adventureDesc) adventureDesc.textContent = data.adventureIdea;
             if (moodBadge) moodBadge.textContent = selectedMood;
 
-            // Wire bookmark button with the returned adventureId
-            const bookmarkBtn = document.querySelector('.material-symbols-outlined.text-indigo-600')?.closest('button');
-            if (bookmarkBtn && data.adventureId) {
-                bookmarkBtn.onclick = () => this.toggleFavourite(data.adventureId, bookmarkBtn);
+            if (bookmarkBtn && adventureId) {
+                bookmarkBtn.onclick = () => this.toggleFavourite(adventureId, bookmarkBtn);
+                bookmarkBtn.dataset.adventureId = adventureId;
             }
 
         } catch(error) {

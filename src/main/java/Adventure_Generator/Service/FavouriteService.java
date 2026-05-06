@@ -1,6 +1,7 @@
 package Adventure_generator.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -46,11 +47,20 @@ public class FavouriteService {
     }
 
     /**
-     * Get all favourites for a user.
+     *  /**
+     * Get all favourites for a user and map it with HTML.
      */
-    @Transactional
-    public List<UserFavourite> getUserFavourites(Long userId){
-        return userFavoriteRepository.findAllByUserId(userId);
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getUserFavourites(Long userId) {
+        return userFavoriteRepository.findAllByUserId(userId).stream()
+                .map(fav -> Map.<String, Object>of(
+                        "favouriteId", fav.getId(),
+                        "adventureId", fav.getAdventure().getId(),
+                        "adventureText", fav.getAdventure().getAdventure(),
+                        "mood", fav.getAdventure().getMood(),
+                        "weather", fav.getAdventure().getWeather()
+                ))
+                .toList();
     }
 
     /**
