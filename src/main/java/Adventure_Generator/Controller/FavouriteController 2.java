@@ -88,9 +88,8 @@ public class FavouriteController {
 
             // Return success response with the new state
             return ResponseEntity.ok(Map.of(
-                "success", true,                 
                 "favourited", added,
-                    "message", added ? "Added to favourites!" : "Removed from favourites!"
+                "message", added ? "Added to favourites!" : "Removed from favourites!"
             ));
 
         } catch (Exception e) {
@@ -163,7 +162,7 @@ public class FavouriteController {
         String username = (String) authentication.getPrincipal();
         
         // Fetch user from database, throw exception if not found
-        User user = userRepositsory.findByUserName(username)
+        User user = userRepository.findByUserName(username)
             .orElseThrow(() -> new RuntimeException("User not found"));
         
         // Fetch adventure from database, throw exception if not found
