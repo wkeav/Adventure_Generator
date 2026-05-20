@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(432 request, HttpServletResponse response, FilterChain filterChain)
         throws IOException, ServletException{
             // get Auth header
             String httpHeader = request.getHeader("Authorization");
