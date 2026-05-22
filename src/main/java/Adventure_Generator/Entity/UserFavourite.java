@@ -39,6 +39,9 @@ import jakarta.persistence.UniqueConstraint;
  * 
  * @see User
  * @see Adventure
+ * 
+ * @author Adventure Generator Team
+ * @version 1.0
  */
 @Entity
 @Table(

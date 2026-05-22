@@ -176,3 +176,4 @@ public class FavouriteController {
         // Return the result
         return ResponseEntity.ok(Map.of("isFavourited", isFavourited));
     }
+}
