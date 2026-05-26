@@ -48,8 +48,10 @@ export class getWeather {
         }
         
         fetch(`/api/weather?lat=${lat}&lon=${lon}`, {
+            method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
         })
             .then(response => {

@@ -51,7 +51,7 @@ public class SecurityConfig{
             )
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/login.html", "/home.html", "/profile.html", "/styles.css", "/js/**", "/").permitAll()
+                .requestMatchers("/api/auth/**", "/api/weather", "/login.html", "/home.html", "/profile.html", "/styles.css", "/js/**", "/").permitAll()
                 .anyRequest().authenticated()
             );
         return http.build();

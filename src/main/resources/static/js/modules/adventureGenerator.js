@@ -151,10 +151,18 @@ export class AdventureGenerator {
     async toggleFavourite(adventureId, button) {
         const token = localStorage.getItem('jwtToken');
         try {
-            const response = await fetch(`/api/favourites/toggle/${adventureId}`, {
+            const response = await fetch(`/api/favourites/${adventureId}/toggle`, {
                 method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const data = await response.json();
 
             // Toggle bookmark icon visually
@@ -167,7 +175,7 @@ export class AdventureGenerator {
                 button.classList.remove('bg-indigo-300');
             }
 
-            console.log(data.message);
+            console.log('Bookmark toggled:', data.message);
         } catch (error) {
             console.error('Error toggling favourite:', error);
         }
